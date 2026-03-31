@@ -1,0 +1,14 @@
+<!-- Ce fichier sert à inclure les scripts SQL,
+faisant évolué la base de données. -->
+
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+
+    <!-- Exemple à enlever -->
+    <!--<include file="db/changelog/sql/01-creation-table-utilisateur.sql"/>-->
+    
+</databaseChangeLog>
