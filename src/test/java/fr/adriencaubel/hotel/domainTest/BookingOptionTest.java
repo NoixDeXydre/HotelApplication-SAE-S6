@@ -2,8 +2,12 @@ package fr.adriencaubel.hotel.domainTest;
 
 import fr.adriencaubel.hotel.domain.Booking;
 import fr.adriencaubel.hotel.domain.BookingOption;
+import fr.adriencaubel.hotel.domain.RoomType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -31,7 +35,17 @@ class BookingOptionTest {
     void settersUpdateFields() {
         // given
         BookingOption option = new BookingOption();
-        Booking booking = new Booking();
+        Booking booking = new Booking(
+                "customer@example.com",
+                "Doe",
+                "John",
+                new RoomType(),
+                LocalDate.of(2026, 1, 1),
+                LocalDate.of(2026, 1, 2),
+                1,
+                BigDecimal.TEN,
+                "CONFIRMED"
+        );
 
         // when
         option.setType("FLEUR");

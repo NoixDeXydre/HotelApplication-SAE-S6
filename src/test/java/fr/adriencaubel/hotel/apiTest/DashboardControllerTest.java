@@ -33,12 +33,32 @@ class DashboardControllerTest {
                 bookingRepository, roomTypeRepository, inventoryRepository
         );
 
-        Booking booking1 = new Booking();
+        Booking booking1 = new Booking(
+                "customer1@example.com",
+                "Doe",
+                "John",
+                new RoomType(),
+                LocalDate.of(2026, 1, 1),
+                LocalDate.of(2026, 1, 2),
+                1,
+                new BigDecimal("100.00"),
+                "CONFIRMED"
+        );
         booking1.setId(1L);
         booking1.setStatus("CONFIRMED");
         booking1.setAmount(new BigDecimal("100.00"));
 
-        Booking booking2 = new Booking();
+        Booking booking2 = new Booking(
+                "customer2@example.com",
+                "Smith",
+                "Jane",
+                new RoomType(),
+                LocalDate.of(2026, 1, 1),
+                LocalDate.of(2026, 1, 2),
+                1,
+                new BigDecimal("50.00"),
+                "PENDING"
+        );
         booking2.setId(2L);
         booking2.setStatus("PENDING");
         booking2.setAmount(new BigDecimal("50.00"));

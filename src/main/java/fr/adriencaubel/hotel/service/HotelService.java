@@ -94,15 +94,11 @@ public class HotelService {
             this.addReserved(req.roomTypeId, d, req.quantity);
             d = d.plusDays(1);
         }
-        
-        Booking booking = new Booking();
-        booking.setRoomType(roomTypeRepo.findById(req.roomTypeId).orElseThrow(() -> new IllegalArgumentException("")));
-        booking.setFromDate(req.from);
-        booking.setToDate(req.to);
-        booking.setQuantity(req.quantity);
-        booking.setAmount(req.amount);
-        booking.setStatus("CONFIRMED");
 
+        CustomerDto customerDto = CustomerValidationService.splitCustomer(req.nomPrenomEmail);
+        RoomType room = roomTypeRepo.findById(req.roomTypeId).orElseThrow(() -> new IllegalArgumentException(""));
+        Booking booking = new Booking(customerDto.getEmail(), customerDto.getFirstName(), customerDto.getLastName(),
+                room, req.from, req.to, req.quantity, req.amount, "CONFIRMED");
         if (req.options != null) {
 
             for (String rawOption : req.options) {
@@ -130,15 +126,13 @@ public class HotelService {
                 option.setType(type);
                 option.setComment(comment);
 
-                booking.getOptions().add(option);
+                booking.addOption(option);
             }
         }
 
 
-        CustomerDto customerDto = CustomerValidationService.splitCustomer(req.nomPrenomEmail);
-        booking.setEmail(customerDto.getEmail());
-        booking.setNom(customerDto.getFirstName());
-        booking.setPrenom(customerDto.getLastName());
+
+
 
         bookingRepo.save(booking);
         
