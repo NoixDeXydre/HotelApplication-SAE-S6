@@ -1,0 +1,222 @@
+@startuml
+title Hotel Application - Class Diagram
+left to right direction
+skinparam linetype ortho
+skinparam packageStyle rectangle
+skinparam classAttributeIconSize 0
+
+package "hotel.api" {
+  class AvailabilityController {
+    -hotelService: HotelService
+    +check(roomTypeId: Long, from: LocalDate, to: LocalDate, qty: int): AvailabilityResponse
+  }
+  class BookingController {
+    -hotelService: HotelService
+    +reserve(req: BookingRequest): Booking
+  }
+  class DashboardController {
+    -bookingRepository: BookingRepository
+    -roomTypeRepository: RoomTypeRepository
+    -inventoryRepository: InventoryRepository
+    +getDashboard(): DashboardResponse
+  }
+  class RoomTypeController {
+    -repository: RoomTypeRepository
+    +findAll(): List<RoomType>
+    +findById(id: Long): RoomType
+    +create(roomType: RoomType): RoomType
+    +update(id: Long, updated: RoomType): RoomType
+    +delete(id: Long): void
+  }
+}
+
+package "hotel.api.dto" {
+  class AvailabilityResponse {
+    +roomTypeId: Long
+    +from: LocalDate
+    +to: LocalDate
+    +available: boolean
+    +remainingMin: int
+    +AvailabilityResponse(roomTypeId: Long, from: LocalDate, to: LocalDate, available: boolean, remainingMin: int)
+  }
+  class BookingRequest {
+    +roomTypeId: Long
+    +from: LocalDate
+    +to: LocalDate
+    +nomPrenomEmail: String
+    +amount: BigDecimal
+    +quantity: int = 1
+    +options: List<String> = List.of()
+  }
+  class BookingResponse {
+    +bookingId: UUID
+    +status: String
+    +message: String
+    +BookingResponse(bookingId: UUID, status: String, message: String)
+  }
+  class DashboardResponse {
+    +totalBookings: long
+    +totalRevenue: BigDecimal
+    +occupancyRate: double
+    +bookingsByStatus: Map<String, Long>
+    +revenueByRoomType: Map<String, BigDecimal>
+    +DashboardResponse(totalBookings: long, totalRevenue: BigDecimal, occupancyRate: double, bookingsByStatus: Map<String, Long>, revenueByRoomType: Map<String, BigDecimal>)
+  }
+}
+
+package "hotel.service" {
+  class HotelService {
+    -roomTypeRepo: RoomTypeRepository
+    -bookingRepo: BookingRepository
+    -inventoryRepo: InventoryRepository
+    -emailSender: EmailSender
+    +checkAvailability(roomTypeId: Long, from: LocalDate, to: LocalDate, qty: int): AvailabilityResponse
+    +reserveRoom(req: BookingRequest): Booking
+    +createIfMissing(roomTypeId: Long, date: LocalDate, totalRooms: int): void
+    +addReserved(roomTypeId: Long, date: LocalDate, quantity: int): void
+  }
+  class EmailSender {
+    -mailSender: JavaMailSender
+    +sendConfirmation(to: String, text: String): void
+  }
+  class PaymentClient {
+    +authorize(creditCard: String, amount: BigDecimal): boolean
+  }
+  class CustomerDto {
+    -firstName: String
+    -lastName: String
+    -email: String
+    +CustomerDto(firstName: String, lastName: String, email: String)
+  }
+  class CustomerValidationService {
+    +splitCustomer(input: String): CustomerDto
+  }
+}
+
+package "hotel.domain" {
+  class Booking {
+    +id: Long
+    +roomType: RoomType
+    +fromDate: LocalDate
+    +toDate: LocalDate
+    +quantity: int
+    +amount: BigDecimal
+    +status: String
+    +nom: String
+    +prenom: String
+    +email: String
+    -options: List<BookingOption>
+    +setOptions(options: List<BookingOption>): void
+    +getOptions(): List<BookingOption>
+  }
+  class BookingOption {
+    -id: Long
+    -type: String
+    -comment: String
+    -booking: Booking
+    +BookingOption()
+    +BookingOption(type: String, comment: String)
+    +getBooking(): Booking
+    +setBooking(booking: Booking): void
+    +getType(): String
+    +setType(type: String): void
+    +getComment(): String
+    +setComment(comment: String): void
+    +getId(): Long
+  }
+  class Inventory {
+    -id: Long
+    -roomType: RoomType
+    -date: LocalDate
+    -totalRooms: int
+    -reservedRooms: int
+    +canReserve(quantity: int): boolean
+    +reserve(quantity: int): void
+    +release(quantity: int): void
+    +availableRooms(): int
+    +getDate(): LocalDate
+  }
+  class RoomType {
+    +id: Long
+    +name: String
+    +totalRooms: int
+    -prices: List<RoomTypePrice>
+  }
+  class RoomTypePrice {
+    -id: Long
+    -startDate: LocalDate
+    -endDate: LocalDate
+    -pricePerNight: BigDecimal
+    -roomType: RoomType
+    +getId(): Long
+    +getStartDate(): LocalDate
+    +getEndDate(): LocalDate
+    +getPricePerNight(): BigDecimal
+    +getRoomType(): RoomType
+    +setStartDate(startDate: LocalDate): void
+    +setEndDate(endDate: LocalDate): void
+    +setPricePerNight(pricePerNight: BigDecimal): void
+    +setRoomType(roomType: RoomType): void
+  }
+}
+
+package "hotel.infra" {
+  interface BookingRepository {
+  }
+  interface InventoryRepository {
+    +findByRoomTypeAndDateBetween(roomTypeId: Long, from: LocalDate, to: LocalDate): List<Inventory>
+    +existsByRoomTypeIdAndDate(roomTypeId: Long, date: LocalDate): boolean
+    +findByRoomTypeIdAndDate(roomTypeId: Long, date: LocalDate): Optional<Inventory>
+  }
+  interface RoomTypeRepository {
+  }
+  interface RoomTypeRateRepository {
+    +findByRoomTypeId(roomTypeId: Long): List<RoomTypePrice>
+  }
+}
+
+package "hotel" {
+  class HotelApplication {
+    +main(args: String[]): void
+  }
+}
+
+AvailabilityController --> HotelService
+BookingController --> HotelService
+RoomTypeController --> RoomTypeRepository
+DashboardController --> BookingRepository
+DashboardController --> RoomTypeRepository
+DashboardController --> InventoryRepository
+
+HotelService --> RoomTypeRepository
+HotelService --> BookingRepository
+HotelService --> InventoryRepository
+HotelService --> EmailSender
+HotelService ..> BookingRequest
+HotelService ..> AvailabilityResponse
+HotelService ..> Booking
+HotelService ..> BookingOption
+HotelService ..> Inventory
+HotelService ..> RoomType
+HotelService ..> CustomerDto
+HotelService ..> CustomerValidationService
+
+CustomerValidationService --> CustomerDto
+
+BookingRepository ..> Booking
+InventoryRepository ..> Inventory
+RoomTypeRepository ..> RoomType
+RoomTypeRateRepository ..> RoomTypePrice
+
+Booking "1" --> "1" RoomType
+Booking "1" o-- "*" BookingOption
+Inventory "*" --> "1" RoomType
+RoomType "1" o-- "*" RoomTypePrice
+
+BookingController ..> Booking
+BookingController ..> BookingRequest
+AvailabilityController ..> AvailabilityResponse
+DashboardController ..> DashboardResponse
+RoomTypeController ..> RoomType
+
+@enduml
