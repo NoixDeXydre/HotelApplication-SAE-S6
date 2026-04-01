@@ -1,6 +1,7 @@
 package fr.adriencaubel.hotel.domainTest;
 
 import fr.adriencaubel.hotel.domain.Inventory;
+import fr.adriencaubel.hotel.domain.RoomType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -15,8 +16,7 @@ class InventoryTest {
     @DisplayName("availableRooms returns total minus reserved")
     void availableRoomsReturnsTotalMinusReserved() {
         // given
-        Inventory inventory = new Inventory();
-        inventory.setTotalRooms(10);
+        Inventory inventory = new Inventory(new RoomType(), LocalDate.of(2024, 1, 1), 10);
         inventory.setReservedRooms(3);
 
         // when
@@ -30,8 +30,7 @@ class InventoryTest {
     @DisplayName("canReserve uses available rooms")
     void canReserveUsesAvailableRooms() {
         // given
-        Inventory inventory = new Inventory();
-        inventory.setTotalRooms(5);
+        Inventory inventory = new Inventory(new RoomType(), LocalDate.of(2024, 1, 1), 5);
         inventory.setReservedRooms(4);
 
         // when
@@ -47,8 +46,7 @@ class InventoryTest {
     @DisplayName("reserve increases reserved rooms when possible")
     void reserveIncreasesReservedRoomsWhenPossible() {
         // given
-        Inventory inventory = new Inventory();
-        inventory.setTotalRooms(5);
+        Inventory inventory = new Inventory(new RoomType(), LocalDate.of(2024, 1, 1), 5);
         inventory.setReservedRooms(1);
 
         // when
@@ -62,22 +60,21 @@ class InventoryTest {
     @DisplayName("reserve throws when insufficient rooms")
     void reserveThrowsWhenInsufficientRooms() {
         // given
-        Inventory inventory = new Inventory();
-        inventory.setTotalRooms(2);
+        Inventory inventory = new Inventory(new RoomType(), LocalDate.of(2024, 1, 1), 2);
         inventory.setReservedRooms(2);
 
         // when
         IllegalStateException ex = assertThrows(IllegalStateException.class, () -> inventory.reserve(1));
 
         // then
-        assertEquals("Not enough rooms available for null", ex.getMessage());
+        assertEquals("Not enough rooms available for 2024-01-01", ex.getMessage());
     }
 
     @Test
     @DisplayName("release decreases reserved rooms")
     void releaseDecreasesReservedRooms() {
         // given
-        Inventory inventory = new Inventory();
+        Inventory inventory = new Inventory(new RoomType(), LocalDate.of(2024, 1, 1), 5);
         inventory.setReservedRooms(3);
 
         // when
@@ -91,7 +88,7 @@ class InventoryTest {
     @DisplayName("release throws when releasing too many")
     void releaseThrowsWhenReleasingTooMany() {
         // given
-        Inventory inventory = new Inventory();
+        Inventory inventory = new Inventory(new RoomType(), LocalDate.of(2024, 1, 1), 5);
         inventory.setReservedRooms(1);
 
         // when
@@ -105,8 +102,7 @@ class InventoryTest {
     @DisplayName("getDate returns assigned date")
     void getDateReturnsAssignedDate() {
         // given
-        Inventory inventory = new Inventory();
-        inventory.setDate(LocalDate.of(2024, 1, 1));
+        Inventory inventory = new Inventory(new RoomType(), LocalDate.of(2024, 1, 1), 1);
 
         // when
         LocalDate date = inventory.getDate();

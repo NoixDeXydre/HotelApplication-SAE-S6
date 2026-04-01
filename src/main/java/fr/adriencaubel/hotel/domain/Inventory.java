@@ -23,6 +23,17 @@ public class Inventory {
     private int totalRooms;
     private int reservedRooms;
 
+    public Inventory(RoomType roomType, LocalDate date, int totalRooms) {
+        if (roomType == null) {
+            throw new IllegalArgumentException("RoomType is not existing");
+        }
+
+        this.roomType = roomType;
+        this.date = date;
+        this.totalRooms = totalRooms;
+        this.reservedRooms = 0;
+    }
+
     public boolean canReserve(int quantity) {
         return availableRooms() >= quantity;
     }
@@ -51,5 +62,9 @@ public class Inventory {
 
     public LocalDate getDate() {
         return date;
+    }
+
+    public void addReservedRooms(int quantity) {
+        reservedRooms += quantity;
     }
 }
