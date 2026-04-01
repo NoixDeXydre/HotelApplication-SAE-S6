@@ -12,5 +12,6 @@
     <include file="changelog/01-creation-customer.sql"/>
     <include file="changelog/02-creation-invoice.sql"/>
     <include file="changelog/03-alter-booking.sql"/>
+    <include file="changelog/04-alter-booking-options.sql"/>
 
 </databaseChangeLog>
