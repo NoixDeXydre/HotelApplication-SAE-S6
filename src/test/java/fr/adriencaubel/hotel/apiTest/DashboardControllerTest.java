@@ -81,9 +81,18 @@ class DashboardControllerTest {
 
         LocalDate today = LocalDate.now();
         when(inventoryRepository.findByRoomTypeAndDateBetween(1L, today, today))
-                .thenReturn(List.of(new Inventory(), new Inventory(), new Inventory()));
+                .thenReturn(List.of(
+                        new Inventory(new RoomType(), today, 1),
+                        new Inventory(new RoomType(), today, 1),
+                        new Inventory(new RoomType(), today, 1)
+                ));
         when(inventoryRepository.findByRoomTypeAndDateBetween(2L, today, today))
-                .thenReturn(List.of(new Inventory(), new Inventory(), new Inventory(), new Inventory()));
+                .thenReturn(List.of(
+                        new Inventory(new RoomType(), today, 1),
+                        new Inventory(new RoomType(), today, 1),
+                        new Inventory(new RoomType(), today, 1),
+                        new Inventory(new RoomType(), today, 1)
+                ));
 
         // when
         DashboardResponse response = controller.getDashboard();

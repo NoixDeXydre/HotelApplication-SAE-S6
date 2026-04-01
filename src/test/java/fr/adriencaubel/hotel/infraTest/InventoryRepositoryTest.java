@@ -1,6 +1,7 @@
 package fr.adriencaubel.hotel.infraTest;
 
 import fr.adriencaubel.hotel.domain.Inventory;
+import fr.adriencaubel.hotel.domain.RoomType;
 import fr.adriencaubel.hotel.infra.InventoryRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,7 +22,7 @@ class InventoryRepositoryTest {
     void findByRoomTypeAndDateBetweenReturnsStubbedList() {
         // given
         InventoryRepository repository = mock(InventoryRepository.class);
-        Inventory inventory = new Inventory();
+        Inventory inventory = new Inventory(new RoomType(), LocalDate.of(2024, 1, 1), 1);
         when(repository.findByRoomTypeAndDateBetween(1L, LocalDate.of(2024, 1, 1), LocalDate.of(2024, 1, 2)))
                 .thenReturn(List.of(inventory));
 
@@ -54,7 +55,7 @@ class InventoryRepositoryTest {
     void findByRoomTypeIdAndDateReturnsStubbedOptional() {
         // given
         InventoryRepository repository = mock(InventoryRepository.class);
-        Inventory inventory = new Inventory();
+        Inventory inventory = new Inventory(new RoomType(), LocalDate.of(2024, 1, 1), 1);
         when(repository.findByRoomTypeIdAndDate(1L, LocalDate.of(2024, 1, 1)))
                 .thenReturn(Optional.of(inventory));
 

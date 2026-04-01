@@ -123,12 +123,8 @@ public class HotelService {
                 .existsByRoomTypeIdAndDate(roomTypeId, date);
 
         if (!exists) {
-            Inventory inventory = new Inventory();
-            inventory.setRoomType(roomTypeRepo.findById(roomTypeId).orElseThrow(() -> new IllegalArgumentException("")));
-            inventory.setDate(date);
-            inventory.setTotalRooms(totalRooms);
-            inventory.setReservedRooms(0);
-
+            Inventory inventory = new Inventory(roomTypeRepo.findById(roomTypeId).orElse(null),
+                    date, totalRooms);
             inventoryRepo.save(inventory);
         }
     }
@@ -140,9 +136,7 @@ public class HotelService {
                 .findByRoomTypeIdAndDate(roomTypeId, date)
                 .orElseThrow(() -> new IllegalStateException("Inventory missing"));
 
-        inventory.setReservedRooms(
-                inventory.getReservedRooms() + quantity
-        );
+        inventory.addReservedRooms(quantity);
 
         inventoryRepo.save(inventory);
     }

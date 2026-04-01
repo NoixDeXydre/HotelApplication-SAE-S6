@@ -76,11 +76,9 @@ class HotelServiceTest {
         roomType.setTotalRooms(5);
         when(roomTypeRepo.findById(1L)).thenReturn(Optional.of(roomType));
 
-        Inventory inv1 = new Inventory();
-        inv1.setTotalRooms(5);
+        Inventory inv1 = new Inventory(new RoomType(), LocalDate.of(2024, 1, 1), 5);
         inv1.setReservedRooms(1);
-        Inventory inv2 = new Inventory();
-        inv2.setTotalRooms(5);
+        Inventory inv2 = new Inventory(new RoomType(), LocalDate.of(2024, 1, 2), 5);
         inv2.setReservedRooms(4);
 
         when(inventoryRepo.findByRoomTypeAndDateBetween(1L, LocalDate.of(2024, 1, 1), LocalDate.of(2024, 1, 3)))
@@ -244,7 +242,7 @@ class HotelServiceTest {
         EmailSender emailSender = mock(EmailSender.class);
         HotelService service = new HotelService(roomTypeRepo, bookingRepo, inventoryRepo, emailSender);
 
-        Inventory inventory = new Inventory();
+        Inventory inventory = new Inventory(new RoomType(), LocalDate.of(2024, 1, 1), 5);
         inventory.setReservedRooms(2);
         when(inventoryRepo.findByRoomTypeIdAndDate(1L, LocalDate.of(2024, 1, 1)))
                 .thenReturn(Optional.of(inventory));
