@@ -77,10 +77,6 @@ public class HotelService {
             throw new IllegalArgumentException("to must be after from");
         }
         
-        if (req.quantity == 0) req.quantity = 1;
-        
-        if (req.amount == null) req.amount = req.amount;
-        
         RoomType rt = roomTypeRepo.findById(req.roomTypeId).orElseThrow(() -> new IllegalArgumentException(""));
         
         AvailabilityResponse check = checkAvailability(req.roomTypeId, req.from, req.to, req.quantity);
@@ -94,14 +90,10 @@ public class HotelService {
             this.addReserved(req.roomTypeId, d, req.quantity);
             d = d.plusDays(1);
         }
-        
-        Booking booking = new Booking();
-        booking.setRoomType(roomTypeRepo.findById(req.roomTypeId).orElseThrow(() -> new IllegalArgumentException("")));
-        booking.setFromDate(req.from);
-        booking.setToDate(req.to);
-        booking.setQuantity(req.quantity);
-        booking.setAmount(req.amount);
-        booking.setStatus("CONFIRMED");
+
+        CustomerDto customerDto = CustomerValidationService.splitCustomer(req.nomPrenomEmail);
+        Booking booking = new Booking(customerDto.getEmail(), customerDto.getFirstName(), customerDto.getLastName(),
+                rt, req.from, req.to, req.quantity, req.amount, "CONFIRMED");
 
         if (req.options != null) {
 
@@ -111,37 +103,13 @@ public class HotelService {
                     continue;
                 }
 
-                String[] parts = rawOption.split(",", 2);
-
-                if (parts.length < 1) {
-                    throw new IllegalArgumentException(
-                            "Invalid option format. Expected 'type,comment'"
-                    );
-                }
-
-                String type = parts[0].trim();
-
-                String comment = null;
-                if (parts.length == 2) {
-                    comment = parts[1].trim();
-                }
-
-                BookingOption option = new BookingOption();
-                option.setType(type);
-                option.setComment(comment);
-
-                booking.getOptions().add(option);
+                booking.addOption(new BookingOption(rawOption.split(",", 2)));
             }
         }
 
-
-        CustomerDto customerDto = CustomerValidationService.splitCustomer(req.nomPrenomEmail);
-        booking.setEmail(customerDto.getEmail());
-        booking.setNom(customerDto.getFirstName());
-        booking.setPrenom(customerDto.getLastName());
-
         bookingRepo.save(booking);
-        
+
+        // TODO remplacer l'exemple "customer@example.com"
         emailSender.sendConfirmation("customer@example.com",
             "Your booking " + booking.id + " is confirmed");
         
