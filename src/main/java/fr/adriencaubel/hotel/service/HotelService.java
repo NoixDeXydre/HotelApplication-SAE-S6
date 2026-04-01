@@ -77,10 +77,6 @@ public class HotelService {
             throw new IllegalArgumentException("to must be after from");
         }
         
-        if (req.quantity == 0) req.quantity = 1;
-        
-        if (req.amount == null) req.amount = req.amount;
-        
         RoomType rt = roomTypeRepo.findById(req.roomTypeId).orElseThrow(() -> new IllegalArgumentException(""));
         
         AvailabilityResponse check = checkAvailability(req.roomTypeId, req.from, req.to, req.quantity);
@@ -96,9 +92,9 @@ public class HotelService {
         }
 
         CustomerDto customerDto = CustomerValidationService.splitCustomer(req.nomPrenomEmail);
-        RoomType room = roomTypeRepo.findById(req.roomTypeId).orElseThrow(() -> new IllegalArgumentException(""));
         Booking booking = new Booking(customerDto.getEmail(), customerDto.getFirstName(), customerDto.getLastName(),
-                room, req.from, req.to, req.quantity, req.amount, "CONFIRMED");
+                rt, req.from, req.to, req.quantity, req.amount, "CONFIRMED");
+
         if (req.options != null) {
 
             for (String rawOption : req.options) {
@@ -107,35 +103,13 @@ public class HotelService {
                     continue;
                 }
 
-                String[] parts = rawOption.split(",", 2);
-
-                if (parts.length < 1) {
-                    throw new IllegalArgumentException(
-                            "Invalid option format. Expected 'type,comment'"
-                    );
-                }
-
-                String type = parts[0].trim();
-
-                String comment = null;
-                if (parts.length == 2) {
-                    comment = parts[1].trim();
-                }
-
-                BookingOption option = new BookingOption();
-                option.setType(type);
-                option.setComment(comment);
-
-                booking.addOption(option);
+                booking.addOption(new BookingOption(rawOption.split(",", 2)));
             }
         }
 
-
-
-
-
         bookingRepo.save(booking);
-        
+
+        // TODO remplacer l'exemple "customer@example.com"
         emailSender.sendConfirmation("customer@example.com",
             "Your booking " + booking.id + " is confirmed");
         

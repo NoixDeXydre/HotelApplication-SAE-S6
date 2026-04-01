@@ -24,7 +24,7 @@ public class Booking {
     public RoomType roomType;
     public LocalDate fromDate;
     public LocalDate toDate;
-    public int quantity;
+    public int quantity = 0;
     public BigDecimal amount;
     public String status;
     public String nom;
@@ -38,6 +38,13 @@ public class Booking {
     public Booking(String email, String nom, String prenom,RoomType roomType,
                    LocalDate fromDate, LocalDate toDate, int quantity,
                    BigDecimal amount, String status) {
+        if (quantity == 0) {
+            this.quantity = 1;
+        }
+
+        if (amount == null) {
+            this.amount = amount;
+        }
         this.email = email;
         this.nom = nom;
         this.prenom = prenom;

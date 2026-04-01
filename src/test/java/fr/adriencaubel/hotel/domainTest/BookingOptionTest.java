@@ -34,7 +34,7 @@ class BookingOptionTest {
     @DisplayName("setters update fields")
     void settersUpdateFields() {
         // given
-        BookingOption option = new BookingOption();
+        BookingOption option = new BookingOption(new String[]{"INIT"});
         Booking booking = new Booking(
                 "customer@example.com",
                 "Doe",
@@ -62,7 +62,7 @@ class BookingOptionTest {
     @DisplayName("getId returns null when not persisted")
     void getIdReturnsNullWhenNotPersisted() {
         // given
-        BookingOption option = new BookingOption();
+        BookingOption option = new BookingOption(new String[]{"INIT"});
 
         // when
         Long id = option.getId();

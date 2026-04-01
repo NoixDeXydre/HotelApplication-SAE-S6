@@ -19,7 +19,19 @@ public class BookingOption {
     @JoinColumn(name = "booking_id")
     private Booking booking;
 
-    public BookingOption() {
+    public BookingOption(String[] parts) {
+        if (parts.length < 1) {
+            throw new IllegalArgumentException(
+                    "Invalid option format. Expected 'type,comment'"
+            );
+        }
+
+        this.type = parts[0].trim();
+
+        this.comment = null;
+        if (parts.length == 2) {
+            comment = parts[1].trim();
+        }
     }
 
     public BookingOption(String type, String comment) {
