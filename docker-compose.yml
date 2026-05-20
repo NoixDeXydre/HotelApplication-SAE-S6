@@ -30,12 +30,12 @@ services:
 
   grafana-lgtm:
     image: 'grafana/otel-lgtm:latest'
-    # LGTM = Grafana + OTEL collector + Tempo + Loki + Mimir in one container.
-    # The app exports to localhost:4317 (OTLP gRPC) and you can view dashboards on http://localhost:3000.
     ports:
       - '3000:3000'
       - '4317:4317'
       - '4318:4318'
+    networks:
+      - hotel-network
 
 volumes:
   mysql_data:
