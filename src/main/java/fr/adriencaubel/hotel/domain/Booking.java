@@ -96,4 +96,8 @@ public class Booking {
     public int getQuantity() {
         return quantity;
     }
+
+    public Long getId() {
+        return id;
+    }
 }
