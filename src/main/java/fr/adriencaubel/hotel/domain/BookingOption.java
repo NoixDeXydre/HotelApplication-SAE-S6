@@ -1,22 +1,13 @@
 package fr.adriencaubel.hotel.domain;
 
-
-import jakarta.persistence.*;
-
-@Entity
-@Table(name = "booking_options")
 public class BookingOption {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String type; // ANNIVERSAIRE, FLEUR, LIT BEBE, AUTRE
 
     private String comment; // texte libre
 
-    @ManyToOne
-    @JoinColumn(name = "booking_id")
     private Booking booking;
 
     public BookingOption() {

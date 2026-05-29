@@ -7,9 +7,9 @@ import fr.adriencaubel.hotel.domain.Booking;
 import fr.adriencaubel.hotel.domain.BookingOption;
 import fr.adriencaubel.hotel.domain.Inventory;
 import fr.adriencaubel.hotel.domain.RoomType;
-import fr.adriencaubel.hotel.infra.BookingRepository;
-import fr.adriencaubel.hotel.infra.InventoryRepository;
-import fr.adriencaubel.hotel.infra.RoomTypeRepository;
+import fr.adriencaubel.hotel.domain.ports.out.BookingRepositoryPort;
+import fr.adriencaubel.hotel.domain.ports.out.InventoryRepositoryPort;
+import fr.adriencaubel.hotel.domain.ports.out.RoomTypeRepositoryPort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,14 +19,14 @@ import java.util.List;
 @Service
 public class HotelService {
     
-    private final RoomTypeRepository roomTypeRepo;
-    private final BookingRepository bookingRepo;
-    private final InventoryRepository inventoryRepo;
+    private final RoomTypeRepositoryPort roomTypeRepo;
+    private final BookingRepositoryPort bookingRepo;
+    private final InventoryRepositoryPort inventoryRepo;
     private final EmailSender emailSender;
     
-    public HotelService(RoomTypeRepository roomTypeRepo,
-                        BookingRepository bookingRepo,
-                        InventoryRepository inventoryRepo,
+    public HotelService(RoomTypeRepositoryPort roomTypeRepo,
+                        BookingRepositoryPort bookingRepo,
+                        InventoryRepositoryPort inventoryRepo,
                         EmailSender emailSender) {
         this.roomTypeRepo = roomTypeRepo;
         this.bookingRepo = bookingRepo;

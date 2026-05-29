@@ -1,22 +1,11 @@
 package fr.adriencaubel.hotel.domain;
 
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.time.LocalDate;
 
-@Entity
-@Table
-@Getter
-@Setter
 public class Inventory {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
     private RoomType roomType;
 
     private LocalDate date;
@@ -51,5 +40,29 @@ public class Inventory {
 
     public LocalDate getDate() {
         return date;
+    }
+
+    public int getTotalRooms() {
+        return totalRooms;
+    }
+
+    public int getReservedRooms() {
+        return reservedRooms;
+    }
+
+    public void setRoomType(RoomType roomType) {
+        this.roomType = roomType;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public void setTotalRooms(int totalRooms) {
+        this.totalRooms = totalRooms;
+    }
+
+    public void setReservedRooms(int reservedRooms) {
+        this.reservedRooms = reservedRooms;
     }
 }

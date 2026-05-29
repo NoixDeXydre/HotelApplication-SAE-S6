@@ -1,16 +1,10 @@
 package fr.adriencaubel.hotel.domain;
 
-import jakarta.persistence.*;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "room_type_prices")
 public class RoomTypePrice {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private LocalDate startDate;
@@ -19,8 +13,6 @@ public class RoomTypePrice {
 
     private BigDecimal pricePerNight;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "room_type_id")
     private RoomType roomType;
 
     public RoomTypePrice() {
