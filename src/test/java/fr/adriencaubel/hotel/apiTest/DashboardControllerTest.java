@@ -8,12 +8,15 @@ import fr.adriencaubel.hotel.domain.RoomType;
 import fr.adriencaubel.hotel.infra.BookingRepository;
 import fr.adriencaubel.hotel.infra.InventoryRepository;
 import fr.adriencaubel.hotel.infra.RoomTypeRepository;
+import fr.adriencaubel.hotel.service.DashboardMetrics;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -25,13 +28,10 @@ class DashboardControllerTest {
     @Test
     @DisplayName("getDashboard aggregates totals and occupancy")
     void getDashboardAggregatesTotalsAndOccupancy() {
+
         // given
-        BookingRepository bookingRepository = mock(BookingRepository.class);
-        RoomTypeRepository roomTypeRepository = mock(RoomTypeRepository.class);
-        InventoryRepository inventoryRepository = mock(InventoryRepository.class);
-        DashboardController controller = new DashboardController(
-                bookingRepository, roomTypeRepository, inventoryRepository
-        );
+        DashboardMetrics dashboardMetrics = mock(DashboardMetrics.class);
+        DashboardController controller = new DashboardController(dashboardMetrics);
 
         Booking booking1 = new Booking(
                 "customer1@example.com",
@@ -63,8 +63,6 @@ class DashboardControllerTest {
         booking2.setStatus("PENDING");
         booking2.setAmount(new BigDecimal("50.00"));
 
-        when(bookingRepository.findAll()).thenReturn(List.of(booking1, booking2));
-
         RoomType rt1 = new RoomType();
         rt1.setId(1L);
         rt1.setName("Standard");
@@ -75,24 +73,19 @@ class DashboardControllerTest {
         rt2.setName("Deluxe");
         rt2.setTotalRooms(20);
 
-        when(roomTypeRepository.findById(1L)).thenReturn(Optional.of(rt1));
-        when(roomTypeRepository.findById(2L)).thenReturn(Optional.of(rt2));
-        when(roomTypeRepository.findAll()).thenReturn(List.of(rt1, rt2));
+        when(dashboardMetrics.getTotalBookings()).thenReturn(2l);
+        when(dashboardMetrics.getTotalRevenue()).thenReturn(new BigDecimal("100.00"));
+        when(dashboardMetrics.getOccupancyRate()).thenReturn(23.333333333333332d);
 
-        LocalDate today = LocalDate.now();
-        when(inventoryRepository.findByRoomTypeAndDateBetween(1L, today, today))
-                .thenReturn(List.of(
-                        new Inventory(new RoomType(), today, 1),
-                        new Inventory(new RoomType(), today, 1),
-                        new Inventory(new RoomType(), today, 1)
-                ));
-        when(inventoryRepository.findByRoomTypeAndDateBetween(2L, today, today))
-                .thenReturn(List.of(
-                        new Inventory(new RoomType(), today, 1),
-                        new Inventory(new RoomType(), today, 1),
-                        new Inventory(new RoomType(), today, 1),
-                        new Inventory(new RoomType(), today, 1)
-                ));
+        Map<String, BigDecimal> rooms = new HashMap<>();
+        rooms.put("Standard",  new BigDecimal("100.00"));
+        rooms.put("Deluxe",  new BigDecimal("50.00"));
+        when(dashboardMetrics.getRevenueByRoomType()).thenReturn(rooms);
+
+        Map<String, Long> status = new HashMap<>();
+        status.put("CONFIRMED",  1l);
+        status.put("PENDING",  1l);
+        when(dashboardMetrics.getBookingsByStatus()).thenReturn(status);
 
         // when
         DashboardResponse response = controller.getDashboard();
