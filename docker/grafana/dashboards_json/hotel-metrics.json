@@ -2,7 +2,7 @@
   "apiVersion": "dashboard.grafana.app/v2",
   "kind": "Dashboard",
   "metadata": {
-    "name": "Hotel Application Metrics",
+    "name": "hotel",
     "namespace": "default",
     "uid": "3490940d-2232-479e-aa88-63dbabc7ff82",
     "resourceVersion": "1779269609560011",

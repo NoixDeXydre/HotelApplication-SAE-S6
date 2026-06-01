@@ -35,7 +35,7 @@ services:
       - '4317:4317'
       - '4318:4318'
     volumes:
-      - ./docker/grafana/provisioning/dashboards/dashboards.yaml:/etc/grafana/provisioning/dashboards/hotel-dashboards.yaml
+      - ./docker/grafana/provisioning/dashboards/dashboards.yml:/etc/grafana/provisioning/dashboards/hotel-dashboards.yaml
       - ./docker/grafana/dashboards_json:/etc/grafana/custom_dashboards
     networks:
       - hotel-network
