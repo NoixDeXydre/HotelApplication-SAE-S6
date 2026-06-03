@@ -3,21 +3,10 @@
   "kind": "Dashboard",
   "metadata": {
     "name": "hotel",
-    "namespace": "default",
-    "uid": "3490940d-2232-479e-aa88-63dbabc7ff82",
-    "resourceVersion": "1779269609560011",
-    "generation": 7,
-    "creationTimestamp": "2026-05-20T07:33:10Z",
-    "labels": {
-      "grafana.app/deprecatedInternalID": "3359558712541184"
-    },
-    "annotations": {
-      "grafana.app/createdBy": "user:bfmg9yao7yjuof",
-      "grafana.app/folder": "",
-      "grafana.app/saved-from-ui": "Grafana v13.0.1 (a100054f)",
-      "grafana.app/updatedBy": "user:bfmg9yao7yjuof",
-      "grafana.app/updatedTimestamp": "2026-05-20T09:33:29Z"
-    }
+    "generation": 13,
+    "creationTimestamp": "2026-06-03T08:56:45Z",
+    "labels": {},
+    "annotations": {}
   },
   "spec": {
     "annotations": [
@@ -28,14 +17,14 @@
             "kind": "DataQuery",
             "group": "grafana",
             "version": "v0",
-            "datasource": {
-              "name": "grafana"
-            },
             "spec": {
               "limit": 100,
               "matchAny": false,
               "tags": [],
               "type": "dashboard"
+            },
+            "labels": {
+              "grafana.app/export-label": "grafana-1"
             }
           },
           "enable": true,
@@ -68,9 +57,6 @@
                       "kind": "DataQuery",
                       "group": "prometheus",
                       "version": "v0",
-                      "datasource": {
-                        "name": "prometheus"
-                      },
                       "spec": {
                         "alias": "",
                         "editorMode": "code",
@@ -80,6 +66,9 @@
                         "legendFormat": "error",
                         "range": true,
                         "rawSql": "SELECT\n  $__time(time_column),\n  value1\nFROM\n  metric_table\nWHERE\n  $__timeFilter(time_column)\n"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "prometheus-1"
                       }
                     },
                     "refId": "A",
@@ -179,6 +168,192 @@
           }
         }
       },
+      "panel-100": {
+        "kind": "Panel",
+        "spec": {
+          "id": 100,
+          "title": "Revenue per roomtype",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "spec": {
+                        "editorMode": "builder",
+                        "exemplar": false,
+                        "expr": "sum by(type) (last_over_time(hotel_revenue_roomtype[$__interval]))",
+                        "format": "heatmap",
+                        "instant": false,
+                        "interval": "",
+                        "legendFormat": "{{type}}",
+                        "range": true
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "prometheus-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "gauge",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "barShape": "flat",
+                "barWidthFactor": 0.3,
+                "effects": {
+                  "barGlow": false,
+                  "centerGlow": false,
+                  "gradient": true
+                },
+                "endpointMarker": "point",
+                "minVizHeight": 75,
+                "minVizWidth": 75,
+                "orientation": "auto",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "segmentCount": 1,
+                "segmentSpacing": 0.3,
+                "shape": "gauge",
+                "showThresholdLabels": false,
+                "showThresholdMarkers": false,
+                "sizing": "auto",
+                "sparkline": true,
+                "textMode": "auto"
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 80,
+                        "color": "red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "fieldMinMax": false
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-101": {
+        "kind": "Panel",
+        "spec": {
+          "id": 101,
+          "title": "Bookings per status ",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "prometheus",
+                      "version": "v0",
+                      "spec": {
+                        "editorMode": "builder",
+                        "expr": "hotel_bookings_status",
+                        "format": "heatmap",
+                        "legendFormat": "{{status}}",
+                        "range": true
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "prometheus-1"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "piechart",
+            "version": "13.0.1",
+            "spec": {
+              "options": {
+                "displayLabels": [
+                  "name"
+                ],
+                "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "pieType": "pie",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "sort": "desc",
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    }
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
       "panel-14": {
         "kind": "Panel",
         "spec": {
@@ -197,9 +372,6 @@
                       "kind": "DataQuery",
                       "group": "prometheus",
                       "version": "v0",
-                      "datasource": {
-                        "name": "prometheus"
-                      },
                       "spec": {
                         "alias": "",
                         "editorMode": "code",
@@ -209,6 +381,9 @@
                         "legendFormat": "warn",
                         "range": true,
                         "rawSql": "SELECT\n  $__time(time_column),\n  value1\nFROM\n  metric_table\nWHERE\n  $__timeFilter(time_column)\n"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "prometheus-1"
                       }
                     },
                     "refId": "A",
@@ -326,9 +501,6 @@
                       "kind": "DataQuery",
                       "group": "prometheus",
                       "version": "v0",
-                      "datasource": {
-                        "name": "prometheus"
-                      },
                       "spec": {
                         "alias": "",
                         "editorMode": "code",
@@ -338,6 +510,9 @@
                         "legendFormat": "debug",
                         "range": true,
                         "rawSql": "SELECT\n  $__time(time_column),\n  value1\nFROM\n  metric_table\nWHERE\n  $__timeFilter(time_column)\n"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "prometheus-1"
                       }
                     },
                     "refId": "A",
@@ -455,9 +630,6 @@
                       "kind": "DataQuery",
                       "group": "prometheus",
                       "version": "v0",
-                      "datasource": {
-                        "name": "prometheus"
-                      },
                       "spec": {
                         "alias": "",
                         "editorMode": "code",
@@ -467,6 +639,9 @@
                         "legendFormat": "trace",
                         "range": true,
                         "rawSql": "SELECT\n  $__time(time_column),\n  value1\nFROM\n  metric_table\nWHERE\n  $__timeFilter(time_column)\n"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "prometheus-1"
                       }
                     },
                     "refId": "A",
@@ -584,9 +759,6 @@
                       "kind": "DataQuery",
                       "group": "prometheus",
                       "version": "v0",
-                      "datasource": {
-                        "name": "prometheus"
-                      },
                       "spec": {
                         "editorMode": "code",
                         "expr": "hikaricp_connections_active{instance=\"$instance\", application=\"$application\", pool=\"$hikaricp\", namespace=\"$Namespace\"}",
@@ -594,6 +766,9 @@
                         "intervalFactor": 1,
                         "legendFormat": "Active",
                         "range": true
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "prometheus-1"
                       }
                     },
                     "refId": "B",
@@ -607,9 +782,6 @@
                       "kind": "DataQuery",
                       "group": "prometheus",
                       "version": "v0",
-                      "datasource": {
-                        "name": "prometheus"
-                      },
                       "spec": {
                         "editorMode": "code",
                         "expr": "hikaricp_connections_idle{instance=\"$instance\", application=\"$application\", pool=\"$hikaricp\", namespace=\"$Namespace\"}",
@@ -617,6 +789,9 @@
                         "intervalFactor": 1,
                         "legendFormat": "Idle",
                         "range": true
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "prometheus-1"
                       }
                     },
                     "refId": "A",
@@ -630,9 +805,6 @@
                       "kind": "DataQuery",
                       "group": "prometheus",
                       "version": "v0",
-                      "datasource": {
-                        "name": "prometheus"
-                      },
                       "spec": {
                         "editorMode": "code",
                         "expr": "hikaricp_connections_pending{instance=\"$instance\", application=\"$application\", pool=\"$hikaricp\", namespace=\"$Namespace\"}",
@@ -640,6 +812,9 @@
                         "intervalFactor": 1,
                         "legendFormat": "Pending",
                         "range": true
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "prometheus-1"
                       }
                     },
                     "refId": "C",
@@ -756,9 +931,6 @@
                       "kind": "DataQuery",
                       "group": "prometheus",
                       "version": "v0",
-                      "datasource": {
-                        "name": "prometheus"
-                      },
                       "spec": {
                         "editorMode": "code",
                         "expr": "hikaricp_connections{instance=\"$instance\", application=\"$application\", pool=\"$hikaricp\", namespace=\"$Namespace\"}",
@@ -766,6 +938,9 @@
                         "intervalFactor": 1,
                         "legendFormat": "",
                         "range": true
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "prometheus-1"
                       }
                     },
                     "refId": "A",
@@ -856,9 +1031,6 @@
                       "kind": "DataQuery",
                       "group": "prometheus",
                       "version": "v0",
-                      "datasource": {
-                        "name": "prometheus"
-                      },
                       "spec": {
                         "editorMode": "code",
                         "expr": "hikaricp_connections_timeout_total{instance=\"$instance\", application=\"$application\", pool=\"$hikaricp\", namespace=\"$Namespace\"}",
@@ -866,6 +1038,9 @@
                         "intervalFactor": 1,
                         "legendFormat": "",
                         "range": true
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "prometheus-1"
                       }
                     },
                     "refId": "A",
@@ -956,9 +1131,6 @@
                       "kind": "DataQuery",
                       "group": "prometheus",
                       "version": "v0",
-                      "datasource": {
-                        "name": "prometheus"
-                      },
                       "spec": {
                         "editorMode": "code",
                         "expr": "sum(jvm_memory_used_bytes{application=\"$application\", instance=\"$instance\", area=\"heap\", namespace=\"$Namespace\"})*100/sum(jvm_memory_max_bytes{application=\"$application\",instance=\"$instance\", area=\"heap\", namespace=\"$Namespace\"})",
@@ -967,6 +1139,9 @@
                         "legendFormat": "",
                         "range": true,
                         "step": 14400
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "prometheus-1"
                       }
                     },
                     "refId": "A",
@@ -1075,9 +1250,6 @@
                       "kind": "DataQuery",
                       "group": "prometheus",
                       "version": "v0",
-                      "datasource": {
-                        "name": "prometheus"
-                      },
                       "spec": {
                         "alias": "",
                         "editorMode": "code",
@@ -1087,6 +1259,9 @@
                         "legendFormat": "info",
                         "range": true,
                         "rawSql": "SELECT\n  $__time(time_column),\n  value1\nFROM\n  metric_table\nWHERE\n  $__timeFilter(time_column)\n"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "prometheus-1"
                       }
                     },
                     "refId": "A",
@@ -1100,14 +1275,14 @@
                       "kind": "DataQuery",
                       "group": "prometheus",
                       "version": "v0",
-                      "datasource": {
-                        "name": "prometheus"
-                      },
                       "spec": {
                         "editorMode": "code",
                         "expr": "logback_events_total{instance=\"$instance\", application=\"$application\"}",
                         "legendFormat": "__auto",
                         "range": true
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "prometheus-1"
                       }
                     },
                     "refId": "B",
@@ -1225,9 +1400,6 @@
                       "kind": "DataQuery",
                       "group": "prometheus",
                       "version": "v0",
-                      "datasource": {
-                        "name": "prometheus"
-                      },
                       "spec": {
                         "editorMode": "code",
                         "expr": "sum(jvm_memory_used_bytes{application=\"$application\", instance=\"$instance\", area=\"nonheap\", namespace=\"$Namespace\"})*100/sum(jvm_memory_max_bytes{application=\"$application\",instance=\"$instance\", area=\"nonheap\", namespace=\"$Namespace\"})",
@@ -1236,6 +1408,9 @@
                         "legendFormat": "",
                         "range": true,
                         "step": 14400
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "prometheus-1"
                       }
                     },
                     "refId": "A",
@@ -1354,9 +1529,6 @@
                       "kind": "DataQuery",
                       "group": "prometheus",
                       "version": "v0",
-                      "datasource": {
-                        "name": "prometheus"
-                      },
                       "spec": {
                         "editorMode": "code",
                         "expr": "irate(jvm_gc_pause_seconds_count{instance=\"$instance\", application=\"$application\", namespace=\"$Namespace\"}[$__rate_interval])",
@@ -1364,6 +1536,9 @@
                         "intervalFactor": 1,
                         "legendFormat": "{{action}} [{{cause}}]",
                         "range": true
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "prometheus-1"
                       }
                     },
                     "refId": "A",
@@ -1480,9 +1655,6 @@
                       "kind": "DataQuery",
                       "group": "prometheus",
                       "version": "v0",
-                      "datasource": {
-                        "name": "prometheus"
-                      },
                       "spec": {
                         "editorMode": "code",
                         "expr": "irate(jvm_gc_pause_seconds_sum{instance=\"$instance\", application=\"$application\", namespace=\"$Namespace\"}[$__rate_interval])",
@@ -1490,6 +1662,9 @@
                         "intervalFactor": 1,
                         "legendFormat": "{{action}} [{{cause}}]",
                         "range": true
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "prometheus-1"
                       }
                     },
                     "refId": "A",
@@ -1606,9 +1781,6 @@
                       "kind": "DataQuery",
                       "group": "prometheus",
                       "version": "v0",
-                      "datasource": {
-                        "name": "prometheus"
-                      },
                       "spec": {
                         "editorMode": "code",
                         "expr": "irate(jvm_gc_memory_allocated_bytes_total{instance=\"$instance\", application=\"$application\", namespace=\"$Namespace\"}[$__rate_interval])",
@@ -1616,6 +1788,9 @@
                         "intervalFactor": 1,
                         "legendFormat": "allocated",
                         "range": true
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "prometheus-1"
                       }
                     },
                     "refId": "A",
@@ -1629,9 +1804,6 @@
                       "kind": "DataQuery",
                       "group": "prometheus",
                       "version": "v0",
-                      "datasource": {
-                        "name": "prometheus"
-                      },
                       "spec": {
                         "editorMode": "code",
                         "expr": "irate(jvm_gc_memory_promoted_bytes_total{instance=\"$instance\", application=\"$application\", namespace=\"$Namespace\"}[$__rate_interval])",
@@ -1639,6 +1811,9 @@
                         "intervalFactor": 1,
                         "legendFormat": "promoted",
                         "range": true
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "prometheus-1"
                       }
                     },
                     "refId": "B",
@@ -1750,9 +1925,6 @@
                       "kind": "DataQuery",
                       "group": "prometheus",
                       "version": "v0",
-                      "datasource": {
-                        "name": "prometheus"
-                      },
                       "spec": {
                         "editorMode": "code",
                         "expr": "jvm_buffer_memory_used_bytes{instance=\"$instance\", application=\"$application\", id=\"direct\", namespace=\"$Namespace\"}",
@@ -1760,6 +1932,9 @@
                         "intervalFactor": 1,
                         "legendFormat": "Used Bytes",
                         "range": true
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "prometheus-1"
                       }
                     },
                     "refId": "A",
@@ -1773,9 +1948,6 @@
                       "kind": "DataQuery",
                       "group": "prometheus",
                       "version": "v0",
-                      "datasource": {
-                        "name": "prometheus"
-                      },
                       "spec": {
                         "editorMode": "code",
                         "expr": "jvm_buffer_total_capacity_bytes{instance=\"$instance\", application=\"$application\", id=\"direct\", namespace=\"$Namespace\"}",
@@ -1783,6 +1955,9 @@
                         "intervalFactor": 1,
                         "legendFormat": "Capacity Bytes",
                         "range": true
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "prometheus-1"
                       }
                     },
                     "refId": "B",
@@ -1894,9 +2069,6 @@
                       "kind": "DataQuery",
                       "group": "prometheus",
                       "version": "v0",
-                      "datasource": {
-                        "name": "prometheus"
-                      },
                       "spec": {
                         "editorMode": "code",
                         "expr": "jvm_buffer_memory_used_bytes{instance=\"$instance\", application=\"$application\", id=\"mapped\", namespace=\"$Namespace\"}",
@@ -1904,6 +2076,9 @@
                         "intervalFactor": 1,
                         "legendFormat": "Used Bytes",
                         "range": true
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "prometheus-1"
                       }
                     },
                     "refId": "A",
@@ -1917,9 +2092,6 @@
                       "kind": "DataQuery",
                       "group": "prometheus",
                       "version": "v0",
-                      "datasource": {
-                        "name": "prometheus"
-                      },
                       "spec": {
                         "editorMode": "code",
                         "expr": "jvm_buffer_total_capacity_bytes{instance=\"$instance\", application=\"$application\", id=\"mapped\", namespace=\"$Namespace\"}",
@@ -1927,6 +2099,9 @@
                         "intervalFactor": 1,
                         "legendFormat": "Capacity Bytes",
                         "range": true
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "prometheus-1"
                       }
                     },
                     "refId": "B",
@@ -2038,9 +2213,6 @@
                       "kind": "DataQuery",
                       "group": "prometheus",
                       "version": "v0",
-                      "datasource": {
-                        "name": "prometheus"
-                      },
                       "spec": {
                         "editorMode": "code",
                         "expr": "jvm_memory_used_bytes{instance=\"$instance\", application=\"$application\", id=\"$memory_pool_heap\", namespace=\"$Namespace\"}",
@@ -2048,6 +2220,9 @@
                         "intervalFactor": 1,
                         "legendFormat": "Used",
                         "range": true
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "prometheus-1"
                       }
                     },
                     "refId": "C",
@@ -2061,9 +2236,6 @@
                       "kind": "DataQuery",
                       "group": "prometheus",
                       "version": "v0",
-                      "datasource": {
-                        "name": "prometheus"
-                      },
                       "spec": {
                         "editorMode": "code",
                         "expr": "jvm_memory_committed_bytes{instance=\"$instance\", application=\"$application\", id=\"$memory_pool_heap\", namespace=\"$Namespace\"}",
@@ -2071,6 +2243,9 @@
                         "intervalFactor": 1,
                         "legendFormat": "Commited",
                         "range": true
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "prometheus-1"
                       }
                     },
                     "refId": "A",
@@ -2084,9 +2259,6 @@
                       "kind": "DataQuery",
                       "group": "prometheus",
                       "version": "v0",
-                      "datasource": {
-                        "name": "prometheus"
-                      },
                       "spec": {
                         "editorMode": "code",
                         "expr": "jvm_memory_max_bytes{instance=\"$instance\", application=\"$application\", id=\"$memory_pool_heap\", namespace=\"$Namespace\"}",
@@ -2094,6 +2266,9 @@
                         "intervalFactor": 1,
                         "legendFormat": "Max",
                         "range": true
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "prometheus-1"
                       }
                     },
                     "refId": "B",
@@ -2210,9 +2385,6 @@
                       "kind": "DataQuery",
                       "group": "prometheus",
                       "version": "v0",
-                      "datasource": {
-                        "name": "prometheus"
-                      },
                       "spec": {
                         "editorMode": "code",
                         "expr": "jvm_memory_used_bytes{instance=\"$instance\", application=\"$application\", id=\"${memory_pool_nonheap:raw}\", namespace=\"$Namespace\"}",
@@ -2220,6 +2392,9 @@
                         "intervalFactor": 1,
                         "legendFormat": "Used",
                         "range": true
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "prometheus-1"
                       }
                     },
                     "refId": "C",
@@ -2233,9 +2408,6 @@
                       "kind": "DataQuery",
                       "group": "prometheus",
                       "version": "v0",
-                      "datasource": {
-                        "name": "prometheus"
-                      },
                       "spec": {
                         "editorMode": "code",
                         "expr": "jvm_memory_committed_bytes{instance=\"$instance\", application=\"$application\", id=\"${memory_pool_nonheap:raw}\", namespace=\"$Namespace\"}",
@@ -2243,6 +2415,9 @@
                         "intervalFactor": 1,
                         "legendFormat": "Commited",
                         "range": true
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "prometheus-1"
                       }
                     },
                     "refId": "A",
@@ -2256,9 +2431,6 @@
                       "kind": "DataQuery",
                       "group": "prometheus",
                       "version": "v0",
-                      "datasource": {
-                        "name": "prometheus"
-                      },
                       "spec": {
                         "editorMode": "code",
                         "expr": "jvm_memory_max_bytes{instance=\"$instance\", application=\"$application\", id=\"${memory_pool_nonheap:raw}\", namespace=\"$Namespace\"}",
@@ -2266,6 +2438,9 @@
                         "intervalFactor": 1,
                         "legendFormat": "Max",
                         "range": true
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "prometheus-1"
                       }
                     },
                     "refId": "B",
@@ -2382,9 +2557,6 @@
                       "kind": "DataQuery",
                       "group": "prometheus",
                       "version": "v0",
-                      "datasource": {
-                        "name": "prometheus"
-                      },
                       "spec": {
                         "editorMode": "code",
                         "expr": "system_cpu_usage{instance=\"$instance\", application=\"$application\", namespace=\"$Namespace\"}",
@@ -2392,6 +2564,9 @@
                         "intervalFactor": 1,
                         "legendFormat": "System CPU Usage",
                         "range": true
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "prometheus-1"
                       }
                     },
                     "refId": "A",
@@ -2405,9 +2580,6 @@
                       "kind": "DataQuery",
                       "group": "prometheus",
                       "version": "v0",
-                      "datasource": {
-                        "name": "prometheus"
-                      },
                       "spec": {
                         "editorMode": "code",
                         "expr": "process_cpu_usage{instance=\"$instance\", application=\"$application\", namespace=\"$Namespace\"}",
@@ -2415,6 +2587,9 @@
                         "intervalFactor": 1,
                         "legendFormat": "Process CPU Usage",
                         "range": true
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "prometheus-1"
                       }
                     },
                     "refId": "B",
@@ -2531,9 +2706,6 @@
                       "kind": "DataQuery",
                       "group": "prometheus",
                       "version": "v0",
-                      "datasource": {
-                        "name": "prometheus"
-                      },
                       "spec": {
                         "editorMode": "code",
                         "expr": "system_load_average_1m{instance=\"$instance\", application=\"$application\", namespace=\"$Namespace\"}",
@@ -2541,6 +2713,9 @@
                         "intervalFactor": 1,
                         "legendFormat": "Load Average [1m]",
                         "range": true
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "prometheus-1"
                       }
                     },
                     "refId": "A",
@@ -2554,9 +2729,6 @@
                       "kind": "DataQuery",
                       "group": "prometheus",
                       "version": "v0",
-                      "datasource": {
-                        "name": "prometheus"
-                      },
                       "spec": {
                         "editorMode": "code",
                         "expr": "system_cpu_count{instance=\"$instance\", application=\"$application\", namespace=\"$Namespace\"}",
@@ -2564,6 +2736,9 @@
                         "intervalFactor": 1,
                         "legendFormat": "CPU Core Size",
                         "range": true
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "prometheus-1"
                       }
                     },
                     "refId": "B",
@@ -2705,15 +2880,15 @@
                       "kind": "DataQuery",
                       "group": "prometheus",
                       "version": "v0",
-                      "datasource": {
-                        "name": "prometheus"
-                      },
                       "spec": {
                         "editorMode": "builder",
                         "expr": "hotel_bookings_total",
                         "instant": false,
                         "legendFormat": "__auto",
                         "range": true
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "prometheus-1"
                       }
                     },
                     "refId": "A",
@@ -2801,15 +2976,15 @@
                       "kind": "DataQuery",
                       "group": "prometheus",
                       "version": "v0",
-                      "datasource": {
-                        "name": "prometheus"
-                      },
                       "spec": {
                         "editorMode": "builder",
                         "expr": "hotel_occupancy_rate",
                         "instant": false,
                         "legendFormat": "__auto",
                         "range": true
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "prometheus-1"
                       }
                     },
                     "refId": "A",
@@ -2920,15 +3095,15 @@
                       "kind": "DataQuery",
                       "group": "prometheus",
                       "version": "v0",
-                      "datasource": {
-                        "name": "prometheus"
-                      },
                       "spec": {
                         "editorMode": "builder",
                         "expr": "hotel_revenue_total",
                         "instant": false,
                         "legendFormat": "__auto",
                         "range": true
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "prometheus-1"
                       }
                     },
                     "refId": "A",
@@ -2981,7 +3156,7 @@
                     "mode": "palette-classic"
                   },
                   "custom": {
-                    "axisBorderShow": false,
+                    "axisBorderShow": true,
                     "axisCenteredZero": false,
                     "axisColorMode": "text",
                     "axisLabel": "",
@@ -2998,6 +3173,9 @@
                     },
                     "insertNulls": false,
                     "lineInterpolation": "linear",
+                    "lineStyle": {
+                      "fill": "solid"
+                    },
                     "lineWidth": 1,
                     "pointSize": 5,
                     "scaleDistribution": {
@@ -3062,6 +3240,24 @@
                         "element": {
                           "kind": "ElementReference",
                           "name": "panel-99"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "AutoGridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-100"
+                        }
+                      }
+                    },
+                    {
+                      "kind": "AutoGridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-101"
                         }
                       }
                     }
@@ -3185,7 +3381,7 @@
                       "kind": "GridLayoutItem",
                       "spec": {
                         "x": 0,
-                        "y": 24,
+                        "y": 16,
                         "width": 12,
                         "height": 7,
                         "element": {
@@ -3198,7 +3394,7 @@
                       "kind": "GridLayoutItem",
                       "spec": {
                         "x": 12,
-                        "y": 24,
+                        "y": 16,
                         "width": 12,
                         "height": 7,
                         "element": {
@@ -3211,7 +3407,7 @@
                       "kind": "GridLayoutItem",
                       "spec": {
                         "x": 0,
-                        "y": 31,
+                        "y": 23,
                         "width": 12,
                         "height": 8,
                         "element": {
@@ -3457,12 +3653,12 @@
             "kind": "DataQuery",
             "group": "prometheus",
             "version": "v0",
-            "datasource": {
-              "name": "prometheus"
-            },
             "spec": {
               "query": "label_values(jvm_info,application)",
               "refId": "PrometheusVariableQueryEditor-VariableQuery"
+            },
+            "labels": {
+              "grafana.app/export-label": "prometheus-1"
             }
           },
           "regex": "",
@@ -3490,12 +3686,12 @@
             "kind": "DataQuery",
             "group": "prometheus",
             "version": "v0",
-            "datasource": {
-              "name": "prometheus"
-            },
             "spec": {
               "query": "label_values(jvm_info,namespace)",
               "refId": "PrometheusVariableQueryEditor-VariableQuery"
+            },
+            "labels": {
+              "grafana.app/export-label": "prometheus-1"
             }
           },
           "regex": "",
@@ -3524,12 +3720,12 @@
             "kind": "DataQuery",
             "group": "prometheus",
             "version": "v0",
-            "datasource": {
-              "name": "prometheus"
-            },
             "spec": {
               "query": "label_values(jvm_info{application=\"$application\", namespace=\"$Namespace\"},instance)",
               "refId": "PrometheusVariableQueryEditor-VariableQuery"
+            },
+            "labels": {
+              "grafana.app/export-label": "prometheus-1"
             }
           },
           "regex": "",
@@ -3558,12 +3754,12 @@
             "kind": "DataQuery",
             "group": "prometheus",
             "version": "v0",
-            "datasource": {
-              "name": "prometheus"
-            },
             "spec": {
               "query": "label_values(hikaricp_connections{instance=\"$instance\", application=\"$application\"}, pool)",
               "refId": "Prometheus-hikaricp-Variable-Query"
+            },
+            "labels": {
+              "grafana.app/export-label": "prometheus-1"
             }
           },
           "regex": "",
@@ -3592,12 +3788,12 @@
             "kind": "DataQuery",
             "group": "prometheus",
             "version": "v0",
-            "datasource": {
-              "name": "prometheus"
-            },
             "spec": {
               "query": "label_values(jvm_memory_used_bytes{application=\"$application\", instance=\"$instance\", area=\"heap\"},id)",
               "refId": "PrometheusVariableQueryEditor-VariableQuery"
+            },
+            "labels": {
+              "grafana.app/export-label": "prometheus-1"
             }
           },
           "regex": "",
@@ -3626,12 +3822,12 @@
             "kind": "DataQuery",
             "group": "prometheus",
             "version": "v0",
-            "datasource": {
-              "name": "prometheus"
-            },
             "spec": {
               "query": "label_values(jvm_memory_used_bytes{application=\"$application\", instance=\"$instance\", area=\"nonheap\"},id)",
               "refId": "PrometheusVariableQueryEditor-VariableQuery"
+            },
+            "labels": {
+              "grafana.app/export-label": "prometheus-1"
             }
           },
           "regex": "",

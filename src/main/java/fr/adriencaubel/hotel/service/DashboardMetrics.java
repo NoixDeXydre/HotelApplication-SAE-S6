@@ -7,6 +7,7 @@ import fr.adriencaubel.hotel.domain.RoomType;
 import fr.adriencaubel.hotel.infra.BookingRepository;
 import fr.adriencaubel.hotel.infra.InventoryRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -42,6 +43,7 @@ public class DashboardMetrics {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
+    @Transactional(readOnly = true)
     public Map<String, BigDecimal> getRevenueByRoomType() {
 
         var bookings = bookingRepository.findAll();
@@ -51,7 +53,7 @@ public class DashboardMetrics {
             List<BookingOption> options = b.getOptions();
             options.forEach(o -> System.out.println(o.getType()));
             RoomType roomType = roomTypeRepository
-                    .findById(b.getId());
+                    .findById(b.getRoomType().getId());
 
             if (roomType == null) continue;
 

@@ -3,7 +3,7 @@
 -- changeset alter-booking:1
 -- Sécurisation du statut : on ajoute la contrainte CHECK sur la colonne existante
 ALTER TABLE booking
-ADD CONSTRAINT chk_booking_status CHECK (status IN ('RESERVED', 'PAID', 'CANCELLED'));
+ADD CONSTRAINT chk_booking_status CHECK (status IN ('PENDING', 'CONFIRMED', 'PAID', 'CANCELLED'));
 
 -- changeset alter-booking:2
 -- Lien entre Booking et Customer

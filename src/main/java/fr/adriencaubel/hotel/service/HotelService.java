@@ -76,8 +76,9 @@ public class HotelService {
         if (req.to.isBefore(req.from)) {
             throw new IllegalArgumentException("to must be after from");
         }
-        
-        RoomType rt = roomTypeRepo.findById(req.roomTypeId).orElseThrow(() -> new IllegalArgumentException(""));
+
+        RoomType rt = roomTypeRepo.findById(req.roomTypeId).orElseThrow
+                (() -> new IllegalArgumentException("The room with the id '" + req.roomTypeId + "' couldn't be found"));
         
         AvailabilityResponse check = checkAvailability(req.roomTypeId, req.from, req.to, req.quantity);
         if (!check.available) {
