@@ -1,4 +1,4 @@
-package fr.adriencaubel.hotel.domain;
+package fr.adriencaubel.hotel.domain.entity;
 
 public class BookingOption {
 

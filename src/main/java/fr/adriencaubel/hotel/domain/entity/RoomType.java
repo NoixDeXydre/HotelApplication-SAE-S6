@@ -1,4 +1,4 @@
-package fr.adriencaubel.hotel.domain;
+package fr.adriencaubel.hotel.domain.entity;
 
 import java.util.ArrayList;
 import java.util.List;

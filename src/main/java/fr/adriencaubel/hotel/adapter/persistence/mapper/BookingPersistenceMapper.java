@@ -1,7 +1,7 @@
 package fr.adriencaubel.hotel.adapter.persistence.mapper;
 
 import fr.adriencaubel.hotel.adapter.persistence.entity.BookingEntity;
-import fr.adriencaubel.hotel.domain.Booking;
+import fr.adriencaubel.hotel.domain.entity.Booking;
 import org.springframework.stereotype.Component;
 
 @Component

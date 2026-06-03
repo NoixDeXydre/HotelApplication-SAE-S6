@@ -1,7 +1,7 @@
 package fr.adriencaubel.hotel.api;
 
 
-import fr.adriencaubel.hotel.domain.RoomType;
+import fr.adriencaubel.hotel.domain.entity.RoomType;
 import fr.adriencaubel.hotel.infra.RoomTypeRepository;
 import org.springframework.web.bind.annotation.*;
 

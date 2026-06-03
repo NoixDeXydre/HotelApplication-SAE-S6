@@ -1,4 +1,4 @@
-package fr.adriencaubel.hotel.domain;
+package fr.adriencaubel.hotel.domain.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

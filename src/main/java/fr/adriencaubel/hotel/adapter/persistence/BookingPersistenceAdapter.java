@@ -2,8 +2,7 @@ package fr.adriencaubel.hotel.adapter.persistence;
 
 import fr.adriencaubel.hotel.adapter.persistence.mapper.BookingPersistenceMapper;
 import fr.adriencaubel.hotel.adapter.persistence.repository.SpringDataBookingRepository;
-import fr.adriencaubel.hotel.domain.Booking;
-import fr.adriencaubel.hotel.infra.BookingRepository;
+import fr.adriencaubel.hotel.domain.entity.Booking;
 import org.springframework.stereotype.Component;
 
 @Component
