@@ -3,7 +3,7 @@
   "kind": "Dashboard",
   "metadata": {
     "name": "hotel",
-    "generation": 10,
+    "generation": 13,
     "creationTimestamp": "2026-06-03T08:56:45Z",
     "labels": {},
     "annotations": {}
@@ -189,9 +189,10 @@
                       "spec": {
                         "editorMode": "builder",
                         "exemplar": false,
-                        "expr": "sum by(type) (hotel_revenue_roomtype)",
-                        "format": "table",
+                        "expr": "sum by(type) (last_over_time(hotel_revenue_roomtype[$__interval]))",
+                        "format": "heatmap",
                         "instant": false,
+                        "interval": "",
                         "legendFormat": "{{type}}",
                         "range": true
                       },
@@ -210,31 +211,36 @@
           },
           "vizConfig": {
             "kind": "VizConfig",
-            "group": "barchart",
+            "group": "gauge",
             "version": "13.0.1",
             "spec": {
               "options": {
-                "barRadius": 0,
-                "barWidth": 0.97,
-                "fullHighlight": false,
-                "groupWidth": 0.7,
-                "legend": {
-                  "calcs": [],
-                  "displayMode": "table",
-                  "placement": "bottom",
-                  "showLegend": true
+                "barShape": "flat",
+                "barWidthFactor": 0.3,
+                "effects": {
+                  "barGlow": false,
+                  "centerGlow": false,
+                  "gradient": true
                 },
+                "endpointMarker": "point",
+                "minVizHeight": 75,
+                "minVizWidth": 75,
                 "orientation": "auto",
-                "showValue": "auto",
-                "stacking": "none",
-                "tooltip": {
-                  "hideZeros": false,
-                  "mode": "single",
-                  "sort": "none"
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
                 },
-                "xField": "type",
-                "xTickLabelRotation": 0,
-                "xTickLabelSpacing": 0
+                "segmentCount": 1,
+                "segmentSpacing": 0.3,
+                "shape": "gauge",
+                "showThresholdLabels": false,
+                "showThresholdMarkers": false,
+                "sizing": "auto",
+                "sparkline": true,
+                "textMode": "auto"
               },
               "fieldConfig": {
                 "defaults": {
@@ -253,27 +259,6 @@
                   },
                   "color": {
                     "mode": "palette-classic"
-                  },
-                  "custom": {
-                    "axisBorderShow": false,
-                    "axisCenteredZero": false,
-                    "axisColorMode": "text",
-                    "axisLabel": "",
-                    "axisPlacement": "auto",
-                    "fillOpacity": 80,
-                    "gradientMode": "none",
-                    "hideFrom": {
-                      "legend": false,
-                      "tooltip": false,
-                      "viz": false
-                    },
-                    "lineWidth": 1,
-                    "scaleDistribution": {
-                      "type": "linear"
-                    },
-                    "thresholdsStyle": {
-                      "mode": "off"
-                    }
                   },
                   "fieldMinMax": false
                 },
@@ -3396,7 +3381,7 @@
                       "kind": "GridLayoutItem",
                       "spec": {
                         "x": 0,
-                        "y": 24,
+                        "y": 16,
                         "width": 12,
                         "height": 7,
                         "element": {
@@ -3409,7 +3394,7 @@
                       "kind": "GridLayoutItem",
                       "spec": {
                         "x": 12,
-                        "y": 24,
+                        "y": 16,
                         "width": 12,
                         "height": 7,
                         "element": {
@@ -3422,7 +3407,7 @@
                       "kind": "GridLayoutItem",
                       "spec": {
                         "x": 0,
-                        "y": 31,
+                        "y": 23,
                         "width": 12,
                         "height": 8,
                         "element": {
