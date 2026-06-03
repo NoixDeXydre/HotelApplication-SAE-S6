@@ -24,6 +24,12 @@ public class RoomType {
     }
 
     public String getName() {
-        return name;
+        return null;
+    }
+
+    public void setName(String name) {
+    }
+
+    public void setTotalRooms(int totalRooms) {
     }
 }
