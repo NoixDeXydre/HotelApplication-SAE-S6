@@ -1,5 +1,8 @@
-package fr.adriencaubel.hotel.domain;
-
+package fr.adriencaubel.hotel.adapter.persistence.entity;
+import fr.adriencaubel.hotel.domain.BookingOption;
+import fr.adriencaubel.hotel.domain.RoomType;
+import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
@@ -7,9 +10,17 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Booking {
+@Entity
+@Table
+@Setter
+@Getter
+public class BookingEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
 
+    @ManyToOne
     public RoomType roomType;
     public LocalDate fromDate;
     public LocalDate toDate;
@@ -20,10 +31,11 @@ public class Booking {
     public String prenom;
     public String email;
 
-    @Setter
+    @OneToMany(mappedBy = "booking",
+            cascade = CascadeType.ALL)
     private List<BookingOption> options = new ArrayList<>();
 
-    public Booking(Long id, RoomType roomType, LocalDate fromDate, LocalDate toDate, int quantity, BigDecimal amount) {
+    public BookingEntity(Long id, RoomType roomType, LocalDate fromDate, LocalDate toDate, int quantity, BigDecimal amount) {
         this.id = id;
         this.roomType = roomType;
         this.fromDate = fromDate;
@@ -106,8 +118,5 @@ public class Booking {
     public Long getId() {
         return id;
     }
-
-    public RoomType getRoomType() {
-        return roomType;
-    }
 }
+
