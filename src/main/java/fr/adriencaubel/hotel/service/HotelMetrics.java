@@ -5,6 +5,8 @@ import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -22,6 +24,10 @@ public class HotelMetrics {
     private final AtomicReference<Double> metricTotalRevenue = new AtomicReference<>(0.0);
     private final AtomicReference<Double> metricOccupancyRate = new AtomicReference<>(0.0);
 
+    // Stockage des compteurs dynamiques par étiquette (Tag)
+    private final Map<String, AtomicLong> statusGauges = new ConcurrentHashMap<>();
+    private final Map<String, AtomicReference<Double>> revenueByRoomGauges = new ConcurrentHashMap<>();
+
     public HotelMetrics(DashboardMetrics dashboardMetrics,
                         MeterRegistry meterRegistry) {
 
@@ -35,8 +41,30 @@ public class HotelMetrics {
 
     @Scheduled(fixedRate = TEMPS_RAFFRAICHISSEMENT_METRIQUES)
     public void refreshMetrics() {
+
         metricTotalRevenue.set(dashboardMetrics.getTotalRevenue().doubleValue());
         metricOccupancyRate.set(dashboardMetrics.getOccupancyRate());
         metricTotalBookings.set(dashboardMetrics.getTotalBookings());
+
+        // Revenue by room type
+        dashboardMetrics.getRevenueByRoomType().forEach((roomType, revenue) -> {
+            revenueByRoomGauges.computeIfAbsent(roomType, key -> {
+                AtomicReference<Double> ref = new AtomicReference<>(0.0);
+                Gauge.builder("hotel.revenue.roomtype", ref, AtomicReference::get)
+                        .tag("type", key)
+                        .register(meterRegistry);
+                return ref;
+            }).set(revenue.doubleValue());
+        });
+
+        dashboardMetrics.getBookingsByStatus().forEach((key, value) -> {
+            statusGauges.computeIfAbsent(key, k -> {
+                AtomicLong al = new AtomicLong(0);
+                    Gauge.builder("hotel.bookings.status", al, AtomicLong::get)
+                        .tag("status", k)
+                        .register(meterRegistry);
+                return al;
+            }).set(value);
+        });
     }
 }
