@@ -110,7 +110,7 @@ public class HotelService {
         bookingRepo.save(booking);
 
         // TODO remplacer l'exemple "customer@example.com"
-        emailSender.sendConfirmation("customer@example.com",
+        emailSender.sendConfirmation("customer@ example.com",
             "Your booking " + booking.id + " is confirmed");
         
         return booking;
