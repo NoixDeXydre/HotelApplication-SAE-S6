@@ -1,7 +1,7 @@
 package fr.adriencaubel.hotel.adapter.persistence.entity;
 
 
-import fr.adriencaubel.hotel.domain.Booking;
+import fr.adriencaubel.hotel.domain.entity.Booking;
 import jakarta.persistence.*;
 
 @Entity
