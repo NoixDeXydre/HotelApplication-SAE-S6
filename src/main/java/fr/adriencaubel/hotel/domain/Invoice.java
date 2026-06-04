@@ -35,12 +35,14 @@ public class Invoice {
     private LocalDate date_to;
     private int quantity;
 
+    private int revision;
+
     @Enumerated(EnumType.STRING)
     private InvoiceStatus status;
 
     private Invoice() {}
 
-    public Invoice(Booking booking) {
+    public Invoice(Booking booking, int revision) {
         this.booking = booking;
         this.invoiceName = "Fact" + this.booking.getId();
         this.type = InvoiceType.INVOICE;
@@ -55,6 +57,7 @@ public class Invoice {
         this.date_from = booking.getFromDate();
         this.date_to = booking.getToDate();
         this.quantity = booking.getQuantity();
+        this.revision = revision;
     }
 
     public void toCreditNote() {
@@ -66,10 +69,16 @@ public class Invoice {
         this.status = InvoiceStatus.CANCELLED;
     }
 
+    public void revision() {
+        this.revision += 1;
+        finalizeInvoice();
+    }
+
     public void finalizeInvoice() {
         if (status != InvoiceStatus.DRAFT) {
             throw new IllegalStateException("Unable to finalize the invoice");
         }
         this.status = InvoiceStatus.FINALIZED;
     }
+
 }
