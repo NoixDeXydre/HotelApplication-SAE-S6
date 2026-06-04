@@ -35,6 +35,8 @@ public class Booking {
             cascade = CascadeType.ALL)
     private List<BookingOption> options = new ArrayList<>();
 
+    public Booking() {}
+
     public Booking(String email, String nom, String prenom,RoomType roomType,
                    LocalDate fromDate, LocalDate toDate, int quantity,
                    BigDecimal amount, String status) {

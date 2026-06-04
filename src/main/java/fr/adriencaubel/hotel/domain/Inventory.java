@@ -23,6 +23,8 @@ public class Inventory {
     private int totalRooms;
     private int reservedRooms;
 
+    public Inventory() {}
+
     public Inventory(RoomType roomType, LocalDate date, int totalRooms) {
         if (roomType == null) {
             throw new IllegalArgumentException("RoomType is not existing");
