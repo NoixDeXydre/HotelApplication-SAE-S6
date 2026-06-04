@@ -15,6 +15,13 @@ public class RoomType {
 
     }
 
+    public RoomType(Long id, List<RoomTypePrice> prices, String name, int totalRooms) {
+        this.id = id;
+        this.prices = prices;
+        this.name = name;
+        this.totalRooms = totalRooms;
+    }
+
     public int getTotalRooms() {
         return totalRooms;
     }
@@ -27,9 +34,15 @@ public class RoomType {
         return null;
     }
 
+    public List<RoomTypePrice> getPrices() {
+        return prices;
+    }
+
     public void setName(String name) {
+        this.name = name;
     }
 
     public void setTotalRooms(int totalRooms) {
+        this.totalRooms = totalRooms;
     }
 }
