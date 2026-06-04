@@ -21,6 +21,7 @@ public class NotificationGeneriqueEmail implements IEmailNotification {
         message.setFrom("noreply@hotel-legacy.com");
         message.setTo(emailTo);
         message.setSubject("Hotel Booking Confirmation");
+        message.setText("Your booking has been confirmed.");
 
         mailSender.send(message);
     }
