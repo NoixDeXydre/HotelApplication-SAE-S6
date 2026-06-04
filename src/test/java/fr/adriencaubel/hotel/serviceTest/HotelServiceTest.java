@@ -10,6 +10,7 @@ import fr.adriencaubel.hotel.infra.BookingRepository;
 import fr.adriencaubel.hotel.infra.InventoryRepository;
 import fr.adriencaubel.hotel.infra.RoomTypeRepository;
 import fr.adriencaubel.hotel.domain.ports.out.notification.IEmailNotification;
+import fr.adriencaubel.hotel.service.BookingInvoiceService;
 import fr.adriencaubel.hotel.service.HotelService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,7 +42,8 @@ class HotelServiceTest {
         BookingRepository bookingRepo = mock(BookingRepository.class);
         InventoryRepository inventoryRepo = mock(InventoryRepository.class);
         IEmailNotification emailSender = mock(IEmailNotification.class);
-        HotelService service = new HotelService(roomTypeRepo, bookingRepo, inventoryRepo, emailSender);
+        BookingInvoiceService bookingInvoiceService = mock(BookingInvoiceService.class);
+        HotelService service = new HotelService(roomTypeRepo, bookingRepo, inventoryRepo, emailSender, bookingInvoiceService);
 
         RoomType roomType = new RoomType();
         roomType.setTotalRooms(5);
@@ -70,7 +72,8 @@ class HotelServiceTest {
         BookingRepository bookingRepo = mock(BookingRepository.class);
         InventoryRepository inventoryRepo = mock(InventoryRepository.class);
         IEmailNotification emailSender = mock(IEmailNotification.class);
-        HotelService service = new HotelService(roomTypeRepo, bookingRepo, inventoryRepo, emailSender);
+        BookingInvoiceService bookingInvoiceService = mock(BookingInvoiceService.class);
+        HotelService service = new HotelService(roomTypeRepo, bookingRepo, inventoryRepo, emailSender, bookingInvoiceService);
 
         RoomType roomType = new RoomType();
         roomType.setTotalRooms(5);
@@ -105,7 +108,8 @@ class HotelServiceTest {
         BookingRepository bookingRepo = mock(BookingRepository.class);
         InventoryRepository inventoryRepo = mock(InventoryRepository.class);
         IEmailNotification emailSender = mock(IEmailNotification.class);
-        HotelService service = spy(new HotelService(roomTypeRepo, bookingRepo, inventoryRepo, emailSender));
+        BookingInvoiceService bookingInvoiceService = mock(BookingInvoiceService.class);
+        HotelService service = spy(new HotelService(roomTypeRepo, bookingRepo, inventoryRepo, emailSender, bookingInvoiceService));
 
         RoomType roomType = new RoomType();
         roomType.setTotalRooms(5);
@@ -162,7 +166,8 @@ class HotelServiceTest {
         BookingRepository bookingRepo = mock(BookingRepository.class);
         InventoryRepository inventoryRepo = mock(InventoryRepository.class);
         IEmailNotification emailSender = mock(IEmailNotification.class);
-        HotelService service = new HotelService(roomTypeRepo, bookingRepo, inventoryRepo, emailSender);
+        BookingInvoiceService bookingInvoiceService = mock(BookingInvoiceService.class);
+        HotelService service = new HotelService(roomTypeRepo, bookingRepo, inventoryRepo, emailSender, bookingInvoiceService);
 
         BookingRequest request = new BookingRequest();
         request.from = LocalDate.of(2024, 1, 3);
@@ -183,7 +188,8 @@ class HotelServiceTest {
         BookingRepository bookingRepo = mock(BookingRepository.class);
         InventoryRepository inventoryRepo = mock(InventoryRepository.class);
         IEmailNotification emailSender = mock(IEmailNotification.class);
-        HotelService service = spy(new HotelService(roomTypeRepo, bookingRepo, inventoryRepo, emailSender));
+        BookingInvoiceService bookingInvoiceService = mock(BookingInvoiceService.class);
+        HotelService service = spy(new HotelService(roomTypeRepo, bookingRepo, inventoryRepo, emailSender, bookingInvoiceService));
 
         BookingRequest request = new BookingRequest();
         request.roomTypeId = 1L;
@@ -214,7 +220,8 @@ class HotelServiceTest {
         BookingRepository bookingRepo = mock(BookingRepository.class);
         InventoryRepository inventoryRepo = mock(InventoryRepository.class);
         IEmailNotification emailSender = mock(IEmailNotification.class);
-        HotelService service = new HotelService(roomTypeRepo, bookingRepo, inventoryRepo, emailSender);
+        BookingInvoiceService bookingInvoiceService = mock(BookingInvoiceService.class);
+        HotelService service = new HotelService(roomTypeRepo, bookingRepo, inventoryRepo, emailSender, bookingInvoiceService);
 
         RoomType roomType = new RoomType();
         roomType.setId(1L);
@@ -243,7 +250,8 @@ class HotelServiceTest {
         BookingRepository bookingRepo = mock(BookingRepository.class);
         InventoryRepository inventoryRepo = mock(InventoryRepository.class);
         IEmailNotification emailSender = mock(IEmailNotification.class);
-        HotelService service = new HotelService(roomTypeRepo, bookingRepo, inventoryRepo, emailSender);
+        BookingInvoiceService bookingInvoiceService = mock(BookingInvoiceService.class);
+        HotelService service = new HotelService(roomTypeRepo, bookingRepo, inventoryRepo, emailSender, bookingInvoiceService);
 
         Inventory inventory = new Inventory(new RoomType(), LocalDate.of(2024, 1, 1), 5);
         inventory.setReservedRooms(2);
