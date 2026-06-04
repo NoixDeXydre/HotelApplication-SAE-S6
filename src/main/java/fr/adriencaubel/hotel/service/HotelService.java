@@ -7,6 +7,7 @@ import fr.adriencaubel.hotel.domain.Booking;
 import fr.adriencaubel.hotel.domain.BookingOption;
 import fr.adriencaubel.hotel.domain.Inventory;
 import fr.adriencaubel.hotel.domain.RoomType;
+import fr.adriencaubel.hotel.domain.ports.out.notification.IEmailNotification;
 import fr.adriencaubel.hotel.infra.BookingRepository;
 import fr.adriencaubel.hotel.infra.InventoryRepository;
 import fr.adriencaubel.hotel.infra.RoomTypeRepository;
@@ -22,12 +23,13 @@ public class HotelService {
     private final RoomTypeRepository roomTypeRepo;
     private final BookingRepository bookingRepo;
     private final InventoryRepository inventoryRepo;
-    private final EmailSender emailSender;
+    
+    private final IEmailNotification emailSender;
     
     public HotelService(RoomTypeRepository roomTypeRepo,
                         BookingRepository bookingRepo,
                         InventoryRepository inventoryRepo,
-                        EmailSender emailSender) {
+                        IEmailNotification emailSender) {
         this.roomTypeRepo = roomTypeRepo;
         this.bookingRepo = bookingRepo;
         this.inventoryRepo = inventoryRepo;
@@ -109,10 +111,7 @@ public class HotelService {
         }
 
         bookingRepo.save(booking);
-
-        // TODO remplacer l'exemple "customer@example.com"
-        emailSender.sendConfirmation("customer@example.com",
-            "Your booking " + booking.id + " is confirmed");
+        emailSender.sendBookingConfirmation(customerDto.getEmail());
         
         return booking;
     }
