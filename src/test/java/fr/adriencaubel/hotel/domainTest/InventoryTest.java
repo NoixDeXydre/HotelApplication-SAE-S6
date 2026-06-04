@@ -110,4 +110,40 @@ class InventoryTest {
         // then
         assertEquals(LocalDate.of(2024, 1, 1), date);
     }
+
+    @Test
+    @DisplayName("constructor throws when roomType is null")
+    void constructorThrowsWhenRoomTypeIsNull() {
+        // when / then
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> new Inventory(null, LocalDate.of(2024, 1, 1), 5)
+        );
+        assertEquals("RoomType is not existing", ex.getMessage());
+    }
+
+    @Test
+    @DisplayName("constructor initialises reservedRooms to zero")
+    void constructorInitialisesReservedRoomsToZero() {
+        // when
+        Inventory inventory = new Inventory(new RoomType(), LocalDate.of(2024, 1, 1), 10);
+
+        // then
+        assertEquals(0, inventory.getReservedRooms());
+        assertEquals(10, inventory.getTotalRooms());
+    }
+
+    @Test
+    @DisplayName("addReservedRooms increments reserved count without capacity check")
+    void addReservedRoomsIncrementsReservedCountWithoutCapacityCheck() {
+        // given
+        Inventory inventory = new Inventory(new RoomType(), LocalDate.of(2024, 1, 1), 5);
+        inventory.setReservedRooms(2);
+
+        // when
+        inventory.addReservedRooms(3);
+
+        // then
+        assertEquals(5, inventory.getReservedRooms());
+    }
 }

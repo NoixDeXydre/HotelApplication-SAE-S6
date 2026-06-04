@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class BookingOptionTest {
 
@@ -69,5 +70,47 @@ class BookingOptionTest {
 
         // then
         assertNull(id);
+    }
+
+    @Test
+    @DisplayName("array constructor with type only sets null comment")
+    void arrayConstructorWithTypeOnlySetsNullComment() {
+        // given
+        String[] parts = {"FLEUR"};
+
+        // when
+        BookingOption option = new BookingOption(parts);
+
+        // then
+        assertEquals("FLEUR", option.getType());
+        assertNull(option.getComment());
+    }
+
+    @Test
+    @DisplayName("array constructor with type and comment sets both fields trimmed")
+    void arrayConstructorWithTypeAndCommentSetsBothFieldsTrimmed() {
+        // given
+        String[] parts = {" ANNIVERSAIRE ", " gateau au chocolat "};
+
+        // when
+        BookingOption option = new BookingOption(parts);
+
+        // then
+        assertEquals("ANNIVERSAIRE", option.getType());
+        assertEquals("gateau au chocolat", option.getComment());
+    }
+
+    @Test
+    @DisplayName("array constructor throws on empty array")
+    void arrayConstructorThrowsOnEmptyArray() {
+        // given
+        String[] parts = {};
+
+        // when / then
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> new BookingOption(parts)
+        );
+        assertEquals("Invalid option format. Expected 'type,comment'", ex.getMessage());
     }
 }
