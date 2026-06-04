@@ -15,7 +15,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class HotelService {
@@ -35,7 +39,8 @@ public class HotelService {
         this.inventoryRepo = inventoryRepo;
         this.emailSender = emailSender;
     }
-    
+
+    @Transactional(readOnly = true)
     public AvailabilityResponse checkAvailability(Long roomTypeId, LocalDate from, LocalDate to, int qty) {
         if (qty <= 0) qty = 1;
         
@@ -86,13 +91,28 @@ public class HotelService {
         if (!check.available) {
             throw new IllegalStateException("Not enough rooms available");
         }
-        
+
+        // (Optimisation) chargement des inventaires en avance
+        List<Inventory> existingInventories =
+                inventoryRepo.findByRoomTypeAndDateBetween(req.roomTypeId, req.from, req.to);
+
+        Map<LocalDate, Inventory> inventoryByDate = existingInventories.stream()
+                .collect(Collectors.toMap(Inventory::getDate, Function.identity()));
+
+        // On itère sans faire une nouvelle requête à chaque fois.
+        List<Inventory> toSave = new ArrayList<>();
         LocalDate d = req.from;
         while (d.isBefore(req.to)) {
-            this.createIfMissing(req.roomTypeId, d, rt.totalRooms);
-            this.addReserved(req.roomTypeId, d, req.quantity);
+            Inventory inv = inventoryByDate.computeIfAbsent(
+                    d,
+                    date -> new Inventory(rt, date, rt.getTotalRooms()) // FIX 2
+            );
+            inv.addReservedRooms(req.quantity);
+            toSave.add(inv);
             d = d.plusDays(1);
         }
+
+        inventoryRepo.saveAll(toSave); // FIX 1 — un seul appel batch
 
         CustomerDto customerDto = CustomerValidationService.splitCustomer(req.nomPrenomEmail);
         Booking booking = new Booking(customerDto.getEmail(), customerDto.getFirstName(), customerDto.getLastName(),
@@ -116,7 +136,6 @@ public class HotelService {
         return booking;
     }
 
-    @Transactional
     public void createIfMissing(Long roomTypeId, LocalDate date, int totalRooms) {
 
         boolean exists = inventoryRepo
@@ -129,7 +148,6 @@ public class HotelService {
         }
     }
 
-    @Transactional
     public void addReserved(Long roomTypeId, LocalDate date, int quantity) {
 
         Inventory inventory = inventoryRepo
