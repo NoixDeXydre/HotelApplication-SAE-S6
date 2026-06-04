@@ -1,7 +1,7 @@
 package fr.adriencaubel.hotel.api;
 
 import fr.adriencaubel.hotel.api.dto.BookingRequest;
-import fr.adriencaubel.hotel.domain.Booking;
+import fr.adriencaubel.hotel.domain.entity.Booking;
 import fr.adriencaubel.hotel.service.HotelService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;

@@ -3,13 +3,13 @@ package fr.adriencaubel.hotel.service;
 
 import fr.adriencaubel.hotel.api.dto.AvailabilityResponse;
 import fr.adriencaubel.hotel.api.dto.BookingRequest;
-import fr.adriencaubel.hotel.domain.Booking;
-import fr.adriencaubel.hotel.domain.BookingOption;
-import fr.adriencaubel.hotel.domain.Inventory;
-import fr.adriencaubel.hotel.domain.RoomType;
-import fr.adriencaubel.hotel.domain.ports.out.BookingRepositoryPort;
-import fr.adriencaubel.hotel.domain.ports.out.InventoryRepositoryPort;
-import fr.adriencaubel.hotel.domain.ports.out.RoomTypeRepositoryPort;
+import fr.adriencaubel.hotel.domain.entity.Booking;
+import fr.adriencaubel.hotel.domain.entity.BookingOption;
+import fr.adriencaubel.hotel.domain.entity.Inventory;
+import fr.adriencaubel.hotel.domain.entity.RoomType;
+import fr.adriencaubel.hotel.domain.ports.out.repository.BookingRepositoryPort;
+import fr.adriencaubel.hotel.domain.ports.out.repository.InventoryRepositoryPort;
+import fr.adriencaubel.hotel.domain.ports.out.repository.RoomTypeRepositoryPort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

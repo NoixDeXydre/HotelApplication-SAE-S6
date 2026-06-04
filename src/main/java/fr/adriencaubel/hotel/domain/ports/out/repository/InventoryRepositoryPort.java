@@ -1,9 +1,6 @@
-package fr.adriencaubel.hotel.domain.ports.out;
+package fr.adriencaubel.hotel.domain.ports.out.repository;
 
-import fr.adriencaubel.hotel.domain.Inventory;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import fr.adriencaubel.hotel.domain.entity.Inventory;
 
 import java.time.LocalDate;
 import java.util.List;

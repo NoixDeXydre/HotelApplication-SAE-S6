@@ -1,6 +1,6 @@
 package fr.adriencaubel.hotel.adapter.persistence.entity;
-import fr.adriencaubel.hotel.domain.BookingOption;
-import fr.adriencaubel.hotel.domain.RoomType;
+import fr.adriencaubel.hotel.domain.entity.BookingOption;
+import fr.adriencaubel.hotel.domain.entity.RoomType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

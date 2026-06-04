@@ -1,6 +1,6 @@
 package fr.adriencaubel.hotel.infra;
 
-import fr.adriencaubel.hotel.domain.Inventory;
+import fr.adriencaubel.hotel.domain.entity.Inventory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

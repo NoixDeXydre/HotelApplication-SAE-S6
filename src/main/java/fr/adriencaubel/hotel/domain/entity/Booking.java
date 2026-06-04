@@ -1,4 +1,4 @@
-package fr.adriencaubel.hotel.domain;
+package fr.adriencaubel.hotel.domain.entity;
 
 import lombok.Setter;
 
@@ -30,6 +30,10 @@ public class Booking {
         this.toDate = toDate;
         this.quantity = quantity;
         this.amount = amount;
+    }
+
+    public Booking() {
+
     }
 
     public List<BookingOption> getOptions() {

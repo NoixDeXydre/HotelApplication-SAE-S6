@@ -2,9 +2,9 @@ package fr.adriencaubel.hotel.api;
 
 
 import fr.adriencaubel.hotel.api.dto.DashboardResponse;
-import fr.adriencaubel.hotel.domain.Booking;
-import fr.adriencaubel.hotel.domain.BookingOption;
-import fr.adriencaubel.hotel.domain.RoomType;
+import fr.adriencaubel.hotel.domain.entity.Booking;
+import fr.adriencaubel.hotel.domain.entity.BookingOption;
+import fr.adriencaubel.hotel.domain.entity.RoomType;
 import fr.adriencaubel.hotel.infra.BookingRepository;
 import fr.adriencaubel.hotel.infra.InventoryRepository;
 import fr.adriencaubel.hotel.infra.RoomTypeRepository;
