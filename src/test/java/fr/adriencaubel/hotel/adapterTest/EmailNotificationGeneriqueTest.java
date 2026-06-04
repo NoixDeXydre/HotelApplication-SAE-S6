@@ -1,6 +1,6 @@
-package fr.adriencaubel.hotel.serviceTest;
+package fr.adriencaubel.hotel.adapterTest;
 
-import fr.adriencaubel.hotel.service.EmailSender;
+import fr.adriencaubel.hotel.adapter.notification.NotificationGeneriqueEmail;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -13,18 +13,18 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-class EmailSenderTest {
+class EmailNotificationGeneriqueTest {
 
     @Test
     @DisplayName("sendConfirmation sends an email")
-    void sendConfirmationSendsAnEmail() {
+    void sendBookingConfirmationTest() {
         // given
         JavaMailSender mailSender = mock(JavaMailSender.class);
-        EmailSender sender = new EmailSender(mailSender);
+        NotificationGeneriqueEmail sender = new NotificationGeneriqueEmail(mailSender);
         ArgumentCaptor<SimpleMailMessage> captor = ArgumentCaptor.forClass(SimpleMailMessage.class);
 
         // when
-        sender.sendConfirmation("user@example.com", "hello");
+        sender.sendBookingConfirmation("user@example.com");
 
         // then
         verify(mailSender).send(captor.capture());
@@ -32,21 +32,6 @@ class EmailSenderTest {
         assertEquals("noreply@hotel-legacy.com", message.getFrom());
         assertEquals("user@example.com", message.getTo()[0]);
         assertEquals("Hotel Booking Confirmation", message.getSubject());
-        assertEquals("hello", message.getText());
-    }
-
-    @Test
-    @DisplayName("sendConfirmation swallows mail exceptions")
-    void sendConfirmationSwallowsMailExceptions() {
-        // given
-        JavaMailSender mailSender = mock(JavaMailSender.class);
-        doThrow(new RuntimeException("boom")).when(mailSender).send(org.mockito.ArgumentMatchers.any(SimpleMailMessage.class));
-        EmailSender sender = new EmailSender(mailSender);
-
-        // when
-        Runnable action = () -> sender.sendConfirmation("user@example.com", "hello");
-
-        // then
-        assertDoesNotThrow(action::run);
+        assertEquals("Your booking has been confirmed.", message.getText());
     }
 }
