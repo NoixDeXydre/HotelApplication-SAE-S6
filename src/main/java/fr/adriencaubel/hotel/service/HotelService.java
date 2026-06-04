@@ -7,6 +7,7 @@ import fr.adriencaubel.hotel.domain.entity.Booking;
 import fr.adriencaubel.hotel.domain.entity.BookingOption;
 import fr.adriencaubel.hotel.domain.entity.Inventory;
 import fr.adriencaubel.hotel.domain.entity.RoomType;
+import fr.adriencaubel.hotel.domain.ports.out.notification.IEmailNotification;
 import fr.adriencaubel.hotel.domain.ports.out.repository.BookingRepositoryPort;
 import fr.adriencaubel.hotel.domain.ports.out.repository.InventoryRepositoryPort;
 import fr.adriencaubel.hotel.domain.ports.out.repository.RoomTypeRepositoryPort;
@@ -22,12 +23,13 @@ public class HotelService {
     private final RoomTypeRepositoryPort roomTypeRepo;
     private final BookingRepositoryPort bookingRepo;
     private final InventoryRepositoryPort inventoryRepo;
-    private final EmailSender emailSender;
+
+    private final IEmailNotification emailSender;
     
     public HotelService(RoomTypeRepositoryPort roomTypeRepo,
                         BookingRepositoryPort bookingRepo,
                         InventoryRepositoryPort inventoryRepo,
-                        EmailSender emailSender) {
+                        IEmailNotification emailSender) {
         this.roomTypeRepo = roomTypeRepo;
         this.bookingRepo = bookingRepo;
         this.inventoryRepo = inventoryRepo;
@@ -94,15 +96,10 @@ public class HotelService {
             this.addReserved(req.roomTypeId, d, req.quantity);
             d = d.plusDays(1);
         }
-        
-        Booking booking = new Booking();
-        booking.setRoomType(roomTypeRepo.findById(req.roomTypeId).orElseThrow(() -> new IllegalArgumentException("")));
-        booking.setFromDate(req.from);
-        booking.setToDate(req.to);
-        booking.setQuantity(req.quantity);
-        booking.setAmount(req.amount);
-        booking.setStatus("CONFIRMED");
 
+        var roomType = roomTypeRepo.findById(req.roomTypeId).orElseThrow(() -> new IllegalArgumentException(""));
+        Booking booking = new Booking(req.roomTypeId, roomType, req.from, req.to, req.quantity, req.amount);
+        booking.setStatus("CONFIRMED");
         if (req.options != null) {
 
             for (String rawOption : req.options) {
@@ -142,8 +139,7 @@ public class HotelService {
 
         bookingRepo.save(booking);
         
-        emailSender.sendConfirmation("customer@example.com",
-            "Your booking " + booking.id + " is confirmed");
+        emailSender.sendBookingConfirmation(customerDto.getEmail());
         
         return booking;
     }
