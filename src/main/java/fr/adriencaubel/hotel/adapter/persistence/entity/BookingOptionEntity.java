@@ -1,24 +1,34 @@
-package fr.adriencaubel.hotel.domain;
+package fr.adriencaubel.hotel.adapter.persistence.entity;
 
-public class BookingOption {
 
+import fr.adriencaubel.hotel.domain.Booking;
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "booking_options")
+public class BookingOptionEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String type; // ANNIVERSAIRE, FLEUR, LIT BEBE, AUTRE
 
     private String comment; // texte libre
 
+    @ManyToOne
+    @JoinColumn(name = "booking_id")
     private Booking booking;
 
-    public BookingOption() {
+    public BookingOptionEntity() {
     }
 
-    public BookingOption(String type, String comment) {
+    public BookingOptionEntity(String type, String comment) {
         this.type = type;
         this.comment = comment;
     }
 
-    public BookingOption(Long id, Booking booking, String comment, String type) {
+    public BookingOptionEntity(Long id, Booking booking, String comment, String type) {
         this.id = id;
         this.booking = booking;
         this.comment = comment;
