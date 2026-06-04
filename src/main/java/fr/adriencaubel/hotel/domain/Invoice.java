@@ -5,6 +5,7 @@ import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Table
@@ -23,6 +24,7 @@ public class Invoice {
 
     @Enumerated(EnumType.STRING)
     private InvoiceType type;
+    private LocalDate issuedAt;
 
     private BigDecimal amount;
 
@@ -48,11 +50,12 @@ public class Invoice {
         this.type = InvoiceType.INVOICE;
 
         this.amount = booking.getAmount();
+        this.status = InvoiceStatus.DRAFT;
 
         this.client_first_name = booking.getPrenom();
         this.client_last_name =  booking.getNom();
         this.client_email =  booking.getEmail();
-
+        this.issuedAt = LocalDate.now();
         this.room_type = booking.getRoomType().getName();
         this.date_from = booking.getFromDate();
         this.date_to = booking.getToDate();

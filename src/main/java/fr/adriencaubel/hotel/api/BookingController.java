@@ -6,6 +6,8 @@ import fr.adriencaubel.hotel.service.HotelService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+
 
 @RestController
 @RequestMapping("/bookings")
@@ -20,5 +22,10 @@ public class BookingController {
     @PostMapping
     public Booking reserve(@RequestBody @Valid BookingRequest req) {
         return hotelService.reserveRoom(req);
+    }
+
+    @PutMapping("/{id}/amount")
+    public void updateAmount(@PathVariable Long id, @RequestBody BigDecimal amount) {
+        hotelService.updateBookingAmount(id, amount);
     }
 }

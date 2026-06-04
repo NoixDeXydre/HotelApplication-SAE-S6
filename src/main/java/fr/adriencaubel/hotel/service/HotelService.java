@@ -14,6 +14,7 @@ import fr.adriencaubel.hotel.infra.RoomTypeRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,7 @@ public class HotelService {
     public HotelService(RoomTypeRepository roomTypeRepo,
                         BookingRepository bookingRepo,
                         InventoryRepository inventoryRepo,
-                        IEmailNotification emailSender) {
+                        IEmailNotification emailSender, BookingInvoiceService bookingInvoiceService) {
         this.roomTypeRepo = roomTypeRepo;
         this.bookingRepo = bookingRepo;
         this.inventoryRepo = inventoryRepo;
@@ -161,5 +162,11 @@ public class HotelService {
         inventory.addReservedRooms(quantity);
 
         inventoryRepo.save(inventory);
+    }
+
+    @Transactional
+    public void updateBookingAmount(Long bookingId, BigDecimal newAmount) {
+        Booking booking = bookingRepo.findByIdForUpdate(bookingId).orElseThrow();
+        bookingInvoiceService.updateBooking(bookingId, newAmount);
     }
 }

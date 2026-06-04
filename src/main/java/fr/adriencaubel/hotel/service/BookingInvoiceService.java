@@ -6,7 +6,11 @@ import fr.adriencaubel.hotel.domain.InvoiceType;
 import fr.adriencaubel.hotel.infra.BookingRepository;
 import fr.adriencaubel.hotel.infra.InvoiceRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
+@Service
 public class BookingInvoiceService {
     private final BookingRepository bookingRepo;
     private final InvoiceRepository invoiceRepo;
@@ -26,7 +30,7 @@ public class BookingInvoiceService {
     }
 
     @Transactional
-    public void updateBooking(Long bookingId) {
+    public void updateBooking(Long bookingId, BigDecimal newAmount) {
         Booking booking = bookingRepo.findByIdForUpdate(bookingId).orElseThrow();
 
         if ("PAID".equals(booking.getStatus())) {
@@ -43,6 +47,8 @@ public class BookingInvoiceService {
         creditNote.toCreditNote();
         invoiceRepo.save(creditNote);
 
+        booking.setAmount(newAmount);
+        bookingRepo.save(booking);
 
         Invoice corrected = new Invoice(booking, revision);
         corrected.revision();
