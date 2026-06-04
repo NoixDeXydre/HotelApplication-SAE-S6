@@ -29,6 +29,8 @@ public class HotelService {
     private final InventoryRepository inventoryRepo;
     
     private final IEmailNotification emailSender;
+
+    private BookingInvoiceService bookingInvoiceService;
     
     public HotelService(RoomTypeRepository roomTypeRepo,
                         BookingRepository bookingRepo,
@@ -38,6 +40,7 @@ public class HotelService {
         this.bookingRepo = bookingRepo;
         this.inventoryRepo = inventoryRepo;
         this.emailSender = emailSender;
+        this.bookingInvoiceService = bookingInvoiceService;
     }
 
     @Transactional(readOnly = true)
@@ -131,6 +134,7 @@ public class HotelService {
         }
 
         bookingRepo.save(booking);
+        bookingInvoiceService.initialInvoice(booking.getId());
         emailSender.sendBookingConfirmation(customerDto.getEmail());
         
         return booking;
