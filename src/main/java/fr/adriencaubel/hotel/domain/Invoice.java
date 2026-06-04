@@ -25,15 +25,14 @@ public class Invoice {
     private InvoiceType type;
 
     private BigDecimal amount;
-    private LocalDate date;
 
-    private String clientFirstName;
-    private String clientLastName;
-    private String clientEmail;
+    private String client_first_name;
+    private String client_last_name;
+    private String client_email;
 
-    private String roomType;
-    private LocalDate dateFrom;
-    private LocalDate dateTo;
+    private String room_type;
+    private LocalDate date_from;
+    private LocalDate date_to;
     private int quantity;
 
     @Enumerated(EnumType.STRING)
@@ -47,30 +46,20 @@ public class Invoice {
         this.type = InvoiceType.INVOICE;
 
         this.amount = booking.getAmount();
-        this.date = LocalDate.now();
 
-        this.clientFirstName = booking.getPrenom();
-        this.clientLastName =  booking.getNom();
-        this.clientEmail =  booking.getEmail();
+        this.client_first_name = booking.getPrenom();
+        this.client_last_name =  booking.getNom();
+        this.client_email =  booking.getEmail();
 
-        this.roomType = booking.getRoomType().getName();
-        this.dateFrom = booking.getFromDate();
-        this.dateTo = booking.getToDate();
+        this.room_type = booking.getRoomType().getName();
+        this.date_from = booking.getFromDate();
+        this.date_to = booking.getToDate();
         this.quantity = booking.getQuantity();
     }
 
-    public boolean modifFacture(BigDecimal amount, LocalDate dateFrom, LocalDate dateTo) {
-        if (status != InvoiceStatus.DRAFT) {
-            return false;
-        }
-        if (amount != null) {
-            this.amount = amount;
-            this.dateFrom = dateFrom;
-            this.dateTo = dateTo;
-        } else {
-            return false;
-        }
-        return true;
+    public void toCreditNote() {
+        this.amount = this.amount.negate();
+        this.type = InvoiceType.CREDIT_NOTE;
     }
 
     public void cancelInvoice() {
@@ -81,6 +70,6 @@ public class Invoice {
         if (status != InvoiceStatus.DRAFT) {
             throw new IllegalStateException("Unable to finalize the invoice");
         }
-        this.status = InvoiceStatus.FINISHED;
+        this.status = InvoiceStatus.FINALIZED;
     }
 }
