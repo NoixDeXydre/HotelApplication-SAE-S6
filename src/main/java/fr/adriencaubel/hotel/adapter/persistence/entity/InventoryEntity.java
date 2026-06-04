@@ -1,21 +1,30 @@
-package fr.adriencaubel.hotel.domain.entity;
+package fr.adriencaubel.hotel.adapter.persistence.entity;
+
+import fr.adriencaubel.hotel.domain.entity.RoomType;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
-public class Inventory {
+@Entity
+@Table
+@Getter
+@Setter
+public class InventoryEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
     private RoomType roomType;
 
     private LocalDate date;
     private int totalRooms;
     private int reservedRooms;
 
-    public Inventory() {
-    }
-
-    public Inventory(Long id, RoomType roomType, int reservedRooms, int totalRooms, LocalDate date) {
+    public InventoryEntity(long id, RoomType roomType, int reservedRooms, int totalRooms, LocalDate date) {
         this.id = id;
         this.roomType = roomType;
         this.reservedRooms = reservedRooms;
@@ -47,14 +56,6 @@ public class Inventory {
 
     public int availableRooms() {
         return totalRooms - reservedRooms;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public RoomType getRoomType() {
-        return roomType;
     }
 
     public LocalDate getDate() {
